@@ -14,7 +14,9 @@ import java.util.HashMap;
 public class Storage implements Serializable {
 
     private static Storage uniqueInstance = null;
-   // public static final int MODE_DEFAULT_INIT = 2;
+    private static final int MODE_LOAD_FROM_FILE_INIT = 1;
+    private static final int MODE_DEFAULT_INIT = 2;
+    private static final int MODE_EMPTY_INIT = 3;
 
     static String filenameAnimals = Resources.storagePath;
 
@@ -26,33 +28,43 @@ public class Storage implements Serializable {
     private HashMap<Integer, Predator> predators = new HashMap<Integer, Predator>();
     private HashMap<Integer, Grass> grasses = new HashMap<Integer, Grass>();
 
+
     private Storage(int initialise) {
-        if(initialise == 2){
-            create(new Predator("Волк", 60F));
-            create(new Predator("Медведь", 400F));
-            create(new Predator("Гиена", 50F));
-
-            create(new Herbivore("Заяц", 3F));
-            create(new Herbivore("Олень", 350F));
-            create(new Herbivore("Лошадь", 380F));
-
-            create(new Grass("Высокая Трава", 200F));
-            create(new Grass("Низкая Трава", 50F));
-            create(new Grass("Сухая трава", 70F));
+        switch (initialise){
+            case MODE_DEFAULT_INIT -> defaultInit();
+            case MODE_EMPTY_INIT -> {}
+            default -> throw new IllegalArgumentException("Неверный способ инициализации");
         }
     }
 
-    private Storage() {}
+    private Storage(){}
 
-    public static Storage getInstance() {
-        if (uniqueInstance == null)
-            uniqueInstance = new Storage();
-        return uniqueInstance;
+    private void defaultInit(){
+        create(new Predator("Волк", 60F));
+        create(new Predator("Медведь", 400F));
+        create(new Predator("Гиена", 50F));
+
+        create(new Herbivore("Заяц", 3F));
+        create(new Herbivore("Олень", 350F));
+        create(new Herbivore("Лошадь", 380F));
+
+        create(new Grass("Высокая Трава", 200F));
+        create(new Grass("Низкая Трава", 50F));
+        create(new Grass("Сухая трава", 70F));
     }
 
-    public static Storage getInstance(int init) {
-        if(uniqueInstance == null)
-            uniqueInstance = new Storage(init);
+    public static Storage getInstance(int initialise) {
+        if(uniqueInstance == null){
+            switch (initialise){
+                case MODE_LOAD_FROM_FILE_INIT ->
+                        {
+                            uniqueInstance = new Storage();
+                            uniqueInstance.load();
+                        }
+                case MODE_DEFAULT_INIT, MODE_EMPTY_INIT -> uniqueInstance = new Storage(initialise);
+                default -> throw new IllegalArgumentException("Неверный способ инициализации");
+            }
+        }
         return uniqueInstance;
     }
 
@@ -236,6 +248,8 @@ public class Storage implements Serializable {
         } catch (IOException | ClassNotFoundException ex) {
             System.err.println(Resources.rb.getString("MESSAGE_LOAD_ERROR"));
             ex.printStackTrace();
+            System.out.println("Не удалось считать данные из файла. Будет выполнена дефолтная инициализация!");
+            defaultInit();
         }
     }
 

@@ -30,24 +30,13 @@ public class Resources {
             System.out.println(configPath);
             properties.load(new FileInputStream(configPath));
             if(System.getProperty("os.name").contains("Windows")) {
-
                 storagePath = properties.getProperty("storage.win.path");
             }
-            else if (System.getProperty("os.name").contains("Linux"))
-            {
+            else if (System.getProperty("os.name").contains("Linux")) {
                 storagePath = properties.getProperty("storage.lin.path");
             }
             setLocale(properties.getProperty("language"));
             initialise = Integer.parseInt(properties.getProperty("storage.load"));
-
-            switch (initialise){
-                case 1 -> {
-                    Storage.getInstance().load();
-                }
-                case 2,3 -> {
-                    Storage.getInstance(initialise);
-                }
-            }
         } catch (IOException ex) {
             ex.printStackTrace();
             System.err.println("Ошибка! Файл с настройками не найден!");

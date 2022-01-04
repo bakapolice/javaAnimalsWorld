@@ -12,7 +12,6 @@ import java.util.*;
 public class Main {
 
     private static final Scanner scanner = new Scanner(System.in);
-    private static final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     public static void main(String[] args) throws IOException {
         int selection = 0;
         if(!GeneralController.startApp()){

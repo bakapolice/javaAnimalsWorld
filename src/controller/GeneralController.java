@@ -13,7 +13,7 @@ public class GeneralController {
 
     public static boolean startApp(){
         boolean isOk = Resources.startApp();
-        if(isOk) storage = Storage.getInstance();
+        if(isOk) storage = Storage.getInstance(Resources.initialise);
         return isOk;
     }
 
