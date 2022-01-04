@@ -6,6 +6,7 @@ import view.ClientForm;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Objects;
 
 public class ClientListener implements ActionListener, ItemListener {
     private final ClientForm clientForm;
@@ -221,9 +222,9 @@ public class ClientListener implements ActionListener, ItemListener {
 
         if (e.getSource() == clientForm.getChoiceLanguage()) {
             clientForm.getTextAreaLogs().append(log + "Язык формы изменен\n");
-            if (clientForm.getChoiceLanguage().getSelectedItem() != Resources.locale.getLanguage()) {
+            if (!Objects.equals(clientForm.getChoiceLanguage().getSelectedItem(), Resources.locale.getLanguage())) {
                 Resources.setLocale(clientForm.getChoiceLanguage().getSelectedItem());
-                System.out.println(Resources.locale.getLanguage());
+                //System.out.println(Resources.locale.getLanguage());
                 clientForm.refresh();
             }
         }

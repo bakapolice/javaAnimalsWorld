@@ -72,11 +72,11 @@ public class ClientForm extends Frame {
 
     public ClientForm() {
         setupGUI();
+        setText();
     }
 
     public void refresh() {
-        this.removeAll();
-        this.setupGUI();
+        setText();
     }
 
     public void disableComponents() {
@@ -88,19 +88,61 @@ public class ClientForm extends Frame {
         }
     }
 
-    public void enableComponents(){
-        for(Component component : this.getComponents())
+    public void enableComponents() {
+        for (Component component : this.getComponents())
             component.setEnabled(true);
         choiceLanguage.setEnabled(false);
         loadData();
     }
 
-    private void loadData(){
+    private void loadData() {
         GeneralController.loadData(choiceAllAliveAnimals, 2);
         GeneralController.loadData(choiceAllAliveHerbivores, 5);
         GeneralController.loadData(listAllAliveHerbivoresToFeed, 5);
         GeneralController.loadData(listAllAlivePredators, 6);
         GeneralController.loadData(choiceAllFood, 7);
+    }
+
+    private void setText() {
+        labelLanguage.setText(Resources.rb.getString("LABEL_LANGUAGE"));
+
+        labelHost.setText(Resources.rb.getString("LABEL_HOST"));
+        labelPort.setText(Resources.rb.getString("LABEL_PORT"));
+        buttonStart.setLabel(Resources.rb.getString("BUTTON_START"));
+
+        buttonCreate.setLabel(Resources.rb.getString("BUTTON_CREATE"));
+        labelCreate.setText(Resources.rb.getString("LABEL_CREATE").toUpperCase());
+        labelWhoToCreate.setText(Resources.rb.getString("LABEL_WHO_TO_CREATE"));
+        labelName.setText(Resources.rb.getString("LABEL_NAME"));
+        labelWeight.setText(Resources.rb.getString("LABEL_WEIGHT"));
+
+        listWhatToCreate.removeAll();
+        listWhatToCreate.add(Resources.rb.getString("MESSAGE_HERBIVORE"));
+        listWhatToCreate.add(Resources.rb.getString("MESSAGE_PREDATOR"));
+        listWhatToCreate.add(Resources.rb.getString("MESSAGE_GRASS"));
+
+        buttonFeed.setLabel(Resources.rb.getString("BUTTON_FEED"));
+        labelFeed.setText(Resources.rb.getString("LABEL_FEED").toUpperCase());
+        labelWhoToFeed.setText(Resources.rb.getString("LABEL_WHO_TO_FEED"));
+        labelWhatToFeed.setText(Resources.rb.getString("LABEL_WHAT_TO_FEED"));
+
+        cbHerbivores.setLabel(Resources.rb.getString("MESSAGE_HERBIVORE"));
+        cbPredators.setLabel(Resources.rb.getString("MESSAGE_PREDATOR"));
+
+        buttonKill.setLabel(Resources.rb.getString("BUTTON_KILL"));
+        labelKill.setText(Resources.rb.getString("LABEL_KILL").toUpperCase());
+        labelWhoToKill.setText(Resources.rb.getString("LABEL_WHO_TO_KILL"));
+
+        buttonPrint.setLabel(Resources.rb.getString("BUTTON_PRINT"));
+        labelPrint.setText(Resources.rb.getString("LABEL_PRINT").toUpperCase());
+        labelWhatToPrint.setText(Resources.rb.getString("LABEL_WHAT_TO_PRINT"));
+        cbAllAnimals.setLabel(Resources.rb.getString("MESSAGE_PRINT_ALL_ANIMALS"));
+        cbAllAliveAnimals.setLabel(Resources.rb.getString("MESSAGE_PRINT_ALL_ALIVE_ANIMALS"));
+        cbAllHerbivores.setLabel(Resources.rb.getString("MESSAGE_PRINT_ALL_HERBIVORES"));
+        cbAllPredators.setLabel(Resources.rb.getString("MESSAGE_PRINT_ALL_PREDATORS"));
+        cbAllAliveHerbivores.setLabel(Resources.rb.getString("MESSAGE_PRINT_ALL_ALIVE_HERBIVORES"));
+        cbAllAlivePredators.setLabel(Resources.rb.getString("MESSAGE_PRINT_ALL_ALIVE_PREDATORS"));
+        cbAllFood.setLabel(Resources.rb.getString("MESSAGE_PRINT_ALL_FOOD"));
     }
 
     private void setupGUI() {
@@ -117,7 +159,7 @@ public class ClientForm extends Frame {
         textFieldWeight.setBounds(136, 286, 166, 24);
         this.add(textFieldWeight);
 
-        labelLanguage = new Label(Resources.rb.getString("LABEL_LANGUAGE"));
+        labelLanguage = new Label();
         labelLanguage.setBounds(59, 20 + 25, 60, 30);
         labelLanguage.setBackground(custom);
         this.add(labelLanguage);
@@ -129,7 +171,7 @@ public class ClientForm extends Frame {
         choiceLanguage.setBounds(120, 20 + 25, 107, 24);
         this.add(choiceLanguage);
 
-        labelHost = new Label(Resources.rb.getString("LABEL_HOST"));
+        labelHost = new Label();
         labelHost.setBounds(280, 20 + 25, 200, 30);
         labelHost.setBackground(custom);
         this.add(labelHost);
@@ -138,7 +180,7 @@ public class ClientForm extends Frame {
         textFieldHost.setBounds(490, 20 + 25, 233, 24);
         this.add(textFieldHost);
 
-        labelPort = new Label(Resources.rb.getString("LABEL_PORT"));
+        labelPort = new Label();
         labelPort.setBounds(778, 20 + 25, 65, 30);
         labelPort.setBackground(custom);
         this.add(labelPort);
@@ -147,7 +189,7 @@ public class ClientForm extends Frame {
         textFieldPort.setBounds(844, 20 + 25, 100, 24);
         this.add(textFieldPort);
 
-        buttonStart = new Button(Resources.rb.getString("BUTTON_START"));
+        buttonStart = new Button();
         buttonStart.setBounds(1136, 15 + 25, 170, 35);
         buttonStart.setBackground(new Color(51, 53, 59));
         buttonStart.setForeground(Color.white);
@@ -161,36 +203,34 @@ public class ClientForm extends Frame {
 
 
         // Блок "Создать"
-        buttonCreate = new Button(Resources.rb.getString("BUTTON_CREATE"));
+        buttonCreate = new Button();
         buttonCreate.setBounds(137, 324, 166, 30);
         buttonCreate.setBackground(new Color(51, 53, 59));
         buttonCreate.setForeground(Color.white);
         this.add(buttonCreate);
 
-        labelCreate = new Label(Resources.rb.getString("LABEL_CREATE").toUpperCase());
+        labelCreate = new Label();
         labelCreate.setBounds(175, 137, 150, 28);
         labelCreate.setBackground(custom);
         this.add(labelCreate);
 
-        labelWhoToCreate = new Label(Resources.rb.getString("LABEL_WHO_TO_CREATE"));
+        labelWhoToCreate = new Label();
         labelWhoToCreate.setBounds(135, 178, 150, 15);
         labelWhoToCreate.setBackground(custom);
         this.add(labelWhoToCreate);
 
-        labelName = new Label(Resources.rb.getString("LABEL_NAME"));
+        labelName = new Label();
         labelName.setBounds(135, 226, 150, 15);
         labelName.setBackground(custom);
         this.add(labelName);
 
-        labelWeight = new Label(Resources.rb.getString("LABEL_WEIGHT"));
+        labelWeight = new Label();
         labelWeight.setBounds(135, 270, 150, 15);
         labelWeight.setBackground(custom);
         this.add(labelWeight);
 
         listWhatToCreate = new Choice();
-        listWhatToCreate.add(Resources.rb.getString("MESSAGE_HERBIVORE"));
-        listWhatToCreate.add(Resources.rb.getString("MESSAGE_PREDATOR"));
-        listWhatToCreate.add(Resources.rb.getString("MESSAGE_GRASS"));
+        listWhatToCreate.removeAll();
         listWhatToCreate.setBounds(136, 196, 166, 24);
         this.add(listWhatToCreate);
 
@@ -202,34 +242,34 @@ public class ClientForm extends Frame {
 
 
         // Блок "Покормить"
-        buttonFeed = new Button(Resources.rb.getString("BUTTON_FEED"));
+        buttonFeed = new Button();
         buttonFeed.setBounds(137, 655, 166, 30);
         buttonFeed.setBackground(new Color(51, 53, 59));
         buttonFeed.setForeground(Color.white);
         this.add(buttonFeed);
 
-        labelFeed = new Label(Resources.rb.getString("LABEL_FEED").toUpperCase());
+        labelFeed = new Label();
         labelFeed.setBounds(156, 465, 150, 28);
         labelFeed.setBackground(custom);
         this.add(labelFeed);
 
-        labelWhoToFeed = new Label(Resources.rb.getString("LABEL_WHO_TO_FEED"));
+        labelWhoToFeed = new Label();
         labelWhoToFeed.setBounds(135, 506, 150, 15);
         labelWhoToFeed.setBackground(custom);
         this.add(labelWhoToFeed);
 
-        labelWhatToFeed = new Label(Resources.rb.getString("LABEL_WHAT_TO_FEED"));
+        labelWhatToFeed = new Label();
         labelWhatToFeed.setBounds(135, 598, 150, 15);
         labelWhatToFeed.setBackground(custom);
         this.add(labelWhatToFeed);
 
         cbgFeed = new CheckboxGroup();
-        cbHerbivores = new Checkbox(Resources.rb.getString("MESSAGE_HERBIVORE"), cbgFeed, false);
+        cbHerbivores = new Checkbox("", cbgFeed, false);
         cbHerbivores.setBounds(135, 532, 150, 15);
         cbHerbivores.setBackground(custom);
         this.add(cbHerbivores);
 
-        cbPredators = new Checkbox(Resources.rb.getString("MESSAGE_PREDATOR"), cbgFeed, false);
+        cbPredators = new Checkbox("", cbgFeed, false);
         cbPredators.setBounds(135, 548, 150, 15);
         cbPredators.setBackground(custom);
         this.add(cbPredators);
@@ -266,18 +306,18 @@ public class ClientForm extends Frame {
 
 
         // Блок "Убить"
-        buttonKill = new Button(Resources.rb.getString("BUTTON_KILL"));
+        buttonKill = new Button();
         buttonKill.setBounds(497, 324, 166, 30);
         buttonKill.setBackground(new Color(51, 53, 59));
         buttonKill.setForeground(Color.white);
         this.add(buttonKill);
 
-        labelKill = new Label(Resources.rb.getString("LABEL_KILL").toUpperCase());
+        labelKill = new Label();
         labelKill.setBounds(547, 137, 150, 28);
         labelKill.setBackground(custom);
         this.add(labelKill);
 
-        labelWhoToKill = new Label(Resources.rb.getString("LABEL_WHO_TO_KILL"));
+        labelWhoToKill = new Label();
         labelWhoToKill.setBounds(494, 178, 150, 15);
         labelWhoToKill.setBackground(custom);
         this.add(labelWhoToKill);
@@ -294,55 +334,55 @@ public class ClientForm extends Frame {
 
 
         // Блок "Печать"
-        buttonPrint = new Button(Resources.rb.getString("BUTTON_PRINT"));
+        buttonPrint = new Button();
         buttonPrint.setBounds(497, 655, 166, 30);
         buttonPrint.setBackground(new Color(51, 53, 59));
         buttonPrint.setForeground(Color.white);
         this.add(buttonPrint);
 
-        labelPrint = new Label(Resources.rb.getString("LABEL_PRINT").toUpperCase());
+        labelPrint = new Label();
         labelPrint.setBounds(490, 465, 150, 28);
         labelPrint.setBackground(custom);
         this.add(labelPrint);
 
-        labelWhatToPrint = new Label(Resources.rb.getString("LABEL_WHAT_TO_PRINT"));
+        labelWhatToPrint = new Label();
         labelWhatToPrint.setBounds(517, 506, 150, 15);
         labelWhatToPrint.setBackground(custom);
         this.add(labelWhatToPrint);
 
         cbgPrint = new CheckboxGroup();
 
-        cbAllAnimals = new Checkbox(Resources.rb.getString("MESSAGE_PRINT_ALL_ANIMALS"), cbgPrint, false);
+        cbAllAnimals = new Checkbox("", cbgPrint, false);
         cbAllAnimals.setBounds(510, 533, 150, 15);
         cbAllAnimals.setBackground(custom);
         this.add(cbAllAnimals);
 
-        cbAllAliveAnimals = new Checkbox(Resources.rb.getString("MESSAGE_PRINT_ALL_ALIVE_ANIMALS"), cbgPrint, false);
+        cbAllAliveAnimals = new Checkbox("", cbgPrint, false);
         cbAllAliveAnimals.setBounds(510, 546, 150, 15);
         cbAllAliveAnimals.setBackground(custom);
         this.add(cbAllAliveAnimals);
 
-        cbAllHerbivores = new Checkbox(Resources.rb.getString("MESSAGE_PRINT_ALL_HERBIVORES"), cbgPrint, false);
+        cbAllHerbivores = new Checkbox("", cbgPrint, false);
         cbAllHerbivores.setBounds(510, 559, 150, 15);
         cbAllHerbivores.setBackground(custom);
         this.add(cbAllHerbivores);
 
-        cbAllPredators = new Checkbox(Resources.rb.getString("MESSAGE_PRINT_ALL_PREDATORS"), cbgPrint, false);
+        cbAllPredators = new Checkbox("", cbgPrint, false);
         cbAllPredators.setBounds(510, 572, 150, 15);
         cbAllPredators.setBackground(custom);
         this.add(cbAllPredators);
 
-        cbAllAliveHerbivores = new Checkbox(Resources.rb.getString("MESSAGE_PRINT_ALL_ALIVE_HERBIVORES"), cbgPrint, false);
+        cbAllAliveHerbivores = new Checkbox("", cbgPrint, false);
         cbAllAliveHerbivores.setBounds(510, 586, 150, 15);
         cbAllAliveHerbivores.setBackground(custom);
         this.add(cbAllAliveHerbivores);
 
-        cbAllAlivePredators = new Checkbox(Resources.rb.getString("MESSAGE_PRINT_ALL_ALIVE_PREDATORS"), cbgPrint, false);
+        cbAllAlivePredators = new Checkbox("", cbgPrint, false);
         cbAllAlivePredators.setBounds(510, 599, 150, 15);
         cbAllAlivePredators.setBackground(custom);
         this.add(cbAllAlivePredators);
 
-        cbAllFood = new Checkbox(Resources.rb.getString("MESSAGE_PRINT_ALL_FOOD"), cbgPrint, false);
+        cbAllFood = new Checkbox("", cbgPrint, false);
         cbAllFood.setBounds(510, 612, 150, 15);
         cbAllFood.setBackground(custom);
         this.add(cbAllFood);
