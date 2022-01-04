@@ -5,15 +5,11 @@ import resources.Resources;
 import storage.Storage;
 
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Scanner;
 
 public class GeneralController {
     public static Storage storage;
     public static final Scanner scanner = new Scanner(System.in);
-    private static final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     public static boolean startApp(){
         boolean isOk = Resources.startApp();
@@ -22,31 +18,6 @@ public class GeneralController {
     }
 
     // Создание -----------------------------------------------------
-    public static void createPredator() {
-        try {
-            storage.create(new Predator(inputName("predator"), inputWeight("predator")));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public static void createHerbivore() {
-        try {
-            storage.create(new Herbivore(inputName("herbivore"), inputWeight("herbivore")));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public static void createGrass() {
-        try {
-            storage.create(new Grass(inputName("grass"), inputWeight("grass")));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-
     public static void createPredator(String name, Float weigh) {
             storage.create(new Predator(name, weigh));
     }
@@ -57,27 +28,6 @@ public class GeneralController {
 
     public static void createGrass(String name, Float weigh) {
             storage.create(new Grass(name, weigh));
-    }
-
-
-    private static String inputName(String type) throws IOException {
-        switch (type) {
-            case "predator" -> System.out.println(Resources.rb.getString("MESSAGE_ENTER_NAME_PREDATOR"));
-            case "herbivore" -> System.out.println(Resources.rb.getString("MESSAGE_ENTER_NAME_HERBIVORE"));
-            case "grass" -> System.out.println(Resources.rb.getString("MESSAGE_ENTER_NAME_GRASS"));
-            default -> System.out.println(Resources.rb.getString("MESSAGE_ENTER_NAME"));
-        }
-        return reader.readLine();
-    }
-
-    private static float inputWeight(String type) {
-        switch (type) {
-            case "predator" -> System.out.println(Resources.rb.getString("MESSAGE_ENTER_WEIGHT_PREDATOR"));
-            case "herbivore" -> System.out.println(Resources.rb.getString("MESSAGE_ENTER_WEIGHT_HERBIVORE"));
-            case "grass" -> System.out.println(Resources.rb.getString("MESSAGE_ENTER_WEIGHT_GRASS"));
-            default -> System.out.println(Resources.rb.getString("MESSAGE_ENTER_WEIGHT"));
-        }
-        return scanner.nextFloat();
     }
     //---------------------------------------------------------------
 
@@ -163,6 +113,7 @@ public class GeneralController {
             default -> throw new IllegalArgumentException("Неверный пункт меню!");
         }
     }
+    //---------------------------------------------------------------
 
     public static void loadData(Choice choice, int selection){
         switch (selection) {
@@ -171,7 +122,7 @@ public class GeneralController {
                     choice.add(animal.getInfo());
             }
             case 2 -> {
-                for(Animal animal : storage.getAllAliveAnimals().values())
+                for(Animal animal : storage.getAllAliveAnimals())
                     choice.add(animal.getInfo());
             }
             case 3 -> {
@@ -197,8 +148,8 @@ public class GeneralController {
             default -> throw new IllegalArgumentException("Неверный пункт меню!");
         }
     }
-    //---------------------------------------------------------------
 
-
-
+    public static void save(){
+        storage.save();
+    }
 }

@@ -14,6 +14,7 @@ import java.util.HashMap;
 public class Storage implements Serializable {
 
     private static Storage uniqueInstance = null;
+   // public static final int MODE_DEFAULT_INIT = 2;
 
     static String filenameAnimals = Resources.storagePath;
 
@@ -44,12 +45,14 @@ public class Storage implements Serializable {
     private Storage() {}
 
     public static Storage getInstance() {
-        if (uniqueInstance == null) uniqueInstance = new Storage();
+        if (uniqueInstance == null)
+            uniqueInstance = new Storage();
         return uniqueInstance;
     }
 
     public static Storage getInstance(int init) {
-        if(uniqueInstance == null) uniqueInstance = new Storage(init);
+        if(uniqueInstance == null)
+            uniqueInstance = new Storage(init);
         return uniqueInstance;
     }
 
@@ -135,10 +138,10 @@ public class Storage implements Serializable {
         this.grasses = grasses;
     }
 
-    public HashMap<Integer, Animal> getAllAliveAnimals() {
-        HashMap<Integer, Animal> aliveAnimals = new HashMap<Integer, Animal>();
-        aliveAnimals.putAll(getAllAlivePredators());
-        aliveAnimals.putAll(getAllAliveHerbivores());
+    public ArrayList<Animal> getAllAliveAnimals() {
+        ArrayList<Animal> aliveAnimals = new ArrayList<>();
+        aliveAnimals.addAll(getAllAlivePredators().values());
+        aliveAnimals.addAll(getAllAliveHerbivores().values());
 
         return aliveAnimals;
     }

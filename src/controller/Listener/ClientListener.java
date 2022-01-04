@@ -1,5 +1,6 @@
 package controller.Listener;
 
+import controller.GeneralController;
 import resources.Resources;
 import view.ClientForm;
 
@@ -7,7 +8,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class ClientListener implements ActionListener, ItemListener {
-    private ClientForm clientForm;
+    private final ClientForm clientForm;
     private Button button;
     private Choice choice;
     private Checkbox checkbox;
@@ -33,6 +34,7 @@ public class ClientListener implements ActionListener, ItemListener {
         this.clientForm.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                GeneralController.save();
                 super.windowClosing(e);
                 System.exit(0);
             }
@@ -45,7 +47,6 @@ public class ClientListener implements ActionListener, ItemListener {
         if (e.getSource() == clientForm.getButtonCreate()) {
             message = log + "Нажата кнопка " + clientForm.getButtonCreate().getActionCommand();
             clientForm.getTextAreaLogs().append(message + '\n');
-
             String selected = clientForm.getListWhatToCreate().getSelectedItem();
             String name = clientForm.getTextFieldName().getText();
             String weigh = clientForm.getTextFieldWeight().getText();
@@ -55,9 +56,15 @@ public class ClientListener implements ActionListener, ItemListener {
                     if (!weigh.isEmpty()) {
                         try {
                             float fWeigh = Float.parseFloat(weigh);
+//                            switch (clientForm.getListWhatToCreate().getSelectedIndex()){
+//                                case 0 -> GeneralController.createHerbivore(name, fWeigh);
+//                                case 1 -> GeneralController.createPredator(name, fWeigh);
+//                                case 2 -> GeneralController.createGrass(name, fWeigh);
+//                            }
                         } catch (NumberFormatException ex) {
                             ex.printStackTrace();
                             clientForm.getTextAreaLogs().append(error + "Значение поля 'Вес' введено некорректно\n");
+                            
                             throw new IllegalArgumentException("Значение веса введено некорректно");
                         }
                     } else {
@@ -89,6 +96,7 @@ public class ClientListener implements ActionListener, ItemListener {
                 clientForm.getTextAreaLogs().append(error + "Выберите кого убить!\n");
                 return;
             }
+
             message = log + "Убить: " + selected;
             clientForm.getTextAreaLogs().append(message + '\n');
         }

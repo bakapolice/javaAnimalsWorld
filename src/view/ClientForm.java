@@ -66,11 +66,12 @@ public class ClientForm extends Frame {
     private Checkbox cbHerbivores;
     private Checkbox cbPredators;
 
+    private Dialog dialog;
+
     private ClientListener clientListener;
 
     public ClientForm() {
         setupGUI();
-        disableComponents();
     }
 
     public void refresh() {
@@ -90,6 +91,11 @@ public class ClientForm extends Frame {
     public void enableComponents(){
         for(Component component : this.getComponents())
             component.setEnabled(true);
+        choiceLanguage.setEnabled(false);
+        loadData();
+    }
+
+    private void loadData(){
         GeneralController.loadData(choiceAllAliveAnimals, 2);
         GeneralController.loadData(choiceAllAliveHerbivores, 5);
         GeneralController.loadData(listAllAliveHerbivoresToFeed, 5);
@@ -367,6 +373,7 @@ public class ClientForm extends Frame {
         setVisible(true);
 
         clientListener = new ClientListener(this);
+        disableComponents();
     }
 
     public TextArea getTextAreaPrint() {
