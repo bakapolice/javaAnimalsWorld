@@ -4,7 +4,13 @@ import controller.GeneralController;
 import controller.Listener.ClientListener;
 import resources.Resources;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 
 public class ClientForm extends Frame {
     private Label labelCreate;
@@ -66,9 +72,35 @@ public class ClientForm extends Frame {
     private Checkbox cbHerbivores;
     private Checkbox cbPredators;
 
+    private ClientListener clientListener;
     private Dialog dialog;
 
-    private ClientListener clientListener;
+    public void showMessage(String title, String message)
+    {
+        dialog = new Dialog(this, title, true);
+        dialog.setLayout(new FlowLayout());
+
+        dialog.setSize(200, 200);
+        dialog.setLocationRelativeTo(null);
+
+        Button ok = new Button("OK");
+        ok.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dialog.dispose();
+            }
+        });
+        dialog.add(new Label(message));
+        dialog.add(ok);
+        dialog.setVisible(true);
+
+        dialog.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                dialog.dispose();
+            }
+        });
+    }
 
     public ClientForm() {
         setupGUI();
@@ -84,7 +116,10 @@ public class ClientForm extends Frame {
             if (component != buttonStart && component != labelLanguage
                     && component != choiceLanguage && component != labelHost
                     && component != textFieldHost && component != labelPort
-                    && component != textFieldPort) component.setEnabled(false);
+                    && component != textFieldPort)
+            {
+                component.setEnabled(false);
+            }
         }
     }
 
@@ -92,6 +127,7 @@ public class ClientForm extends Frame {
         for (Component component : this.getComponents())
             component.setEnabled(true);
         choiceLanguage.setEnabled(false);
+        buttonStart.setEnabled(false);
         loadData();
     }
 

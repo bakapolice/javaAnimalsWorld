@@ -124,14 +124,17 @@ public class ClientListener implements ActionListener, ItemListener {
         String weigh = clientForm.getTextFieldWeight().getText();
 
         if (selected.isEmpty()) {
+            clientForm.showMessage("Ошибка", "Выберите кого создать!");
             clientForm.getTextAreaLogs().append(error + "Выберите кого создать!\n");
             return;
         }
         if (name.isEmpty()) {
+            clientForm.showMessage("Ошибка", "Заполните поле 'Имя'");
             clientForm.getTextAreaLogs().append(error + "Заполните поле 'Имя'\n");
             return;
         }
         if (weigh.isEmpty()) {
+            clientForm.showMessage("Ошибка", "Заполните поле 'Вес'");
             clientForm.getTextAreaLogs().append(error + "Заполните поле 'Вес'\n");
             return;
         }
@@ -145,7 +148,9 @@ public class ClientListener implements ActionListener, ItemListener {
 //                            }
         } catch (NumberFormatException ex) {
             ex.printStackTrace();
+            clientForm.showMessage("Ошибка", "Значение поля 'Вес' введено некорректно");
             clientForm.getTextAreaLogs().append(error + "Значение поля 'Вес' введено некорректно\n");
+            return;
         }
         message = log +
                 "Создать: " + selected + "; " +
@@ -159,6 +164,7 @@ public class ClientListener implements ActionListener, ItemListener {
         String message;
         String selected = clientForm.getChoiceAllAliveAnimals().getSelectedItem();
         if (selected.isEmpty()) {
+            clientForm.showMessage("Ошибка", "Выберите кого убить!");
             clientForm.getTextAreaLogs().append(error + "Выберите кого убить!\n");
             return;
         }
@@ -169,6 +175,7 @@ public class ClientListener implements ActionListener, ItemListener {
     private void feedPerform() {
         String message;
         if (clientForm.getCbgFeed().getSelectedCheckbox() == null) {
+            clientForm.showMessage("Ошибка", "Выберите кого покормить!");
             clientForm.getTextAreaLogs().append(error + "Выберите кого покормить!\n");
             return;
         }
@@ -177,10 +184,12 @@ public class ClientListener implements ActionListener, ItemListener {
             String selectedHerbivore = clientForm.getListAllAliveHerbivoresToFeed().getSelectedItem();
             String selectedFood = clientForm.getChoiceAllFood().getSelectedItem();
             if (selectedHerbivore.isEmpty()) {
+                clientForm.showMessage("Ошибка", "Выберите кого кормить!");
                 clientForm.getTextAreaLogs().append(error + "Выберите кого кормить!\n");
                 return;
             }
             if (selectedFood.isEmpty()) {
+                clientForm.showMessage("Ошибка", "Выберите чем кормить!");
                 clientForm.getTextAreaLogs().append(error + "Выберите чем кормить!\n");
                 return;
             }
@@ -194,11 +203,13 @@ public class ClientListener implements ActionListener, ItemListener {
             String selectedPredator = clientForm.getListAllAlivePredators().getSelectedItem();
             String selectedFood = clientForm.getChoiceAllAliveHerbivores().getSelectedItem();
             if (selectedPredator.isEmpty()) {
-                clientForm.getTextAreaLogs().append(error + "Выберите чем кормить!\n");
+                clientForm.showMessage("Ошибка", "Выберите кого кормить!");
+                clientForm.getTextAreaLogs().append(error + "Выберите кого кормить!\n");
                 return;
             }
             if (selectedFood.isEmpty()) {
-                clientForm.getTextAreaLogs().append(error + "Выберите кого кормить!\n");
+                clientForm.showMessage("Ошибка", "Выберите чем кормить!");
+                clientForm.getTextAreaLogs().append(error + "Выберите чем кормить!\n");
                 return;
             }
             message = log +
@@ -210,6 +221,7 @@ public class ClientListener implements ActionListener, ItemListener {
 
     private void printPerform() {
         if (clientForm.getCbgPrint().getSelectedCheckbox() == null) {
+            clientForm.showMessage("Ошибка", "Выберите что вывести на экран!");
             clientForm.getTextAreaLogs().append(error + "Выберите что вывести на экран!\n");
             return;
         }
@@ -243,10 +255,12 @@ public class ClientListener implements ActionListener, ItemListener {
         String sPort = clientForm.getTextFieldPort().getText();
         int port = 0;
         if (host.isEmpty()) {
+            clientForm.showMessage("Ошибка", "Введите адрес хоста!");
             clientForm.getTextAreaLogs().append(error + "Введите адрес хоста!\n");
             return;
         }
         if (sPort.isEmpty()) {
+            clientForm.showMessage("Ошибка", "Введите значение порта!");
             clientForm.getTextAreaLogs().append(error + "Введите значение порта!\n");
             return;
         }
@@ -255,7 +269,9 @@ public class ClientListener implements ActionListener, ItemListener {
             port = Integer.parseInt(sPort);
         } catch (NumberFormatException ex) {
             ex.printStackTrace();
+            clientForm.showMessage("Ошибка", "Значение порта введено некорректно!");
             clientForm.getTextAreaLogs().append(error + "Значение порта введено некорректно!\n");
+            return;
         }
 
         message = log +

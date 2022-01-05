@@ -27,6 +27,7 @@ public class Main {
         switch (selection){
             case 1 -> showDialog();
             case 2 -> showForm();
+            default -> throw new IllegalArgumentException("Неверный пункт меню!");
         }
         System.out.println(Resources.rb.getString("MESSAGE_HELLO"));
     }
