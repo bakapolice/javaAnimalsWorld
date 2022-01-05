@@ -101,7 +101,6 @@ public class ClientForm extends Frame {
         buttonKill.setToolTipText(messageDisabled);
         buttonFeed.setToolTipText(messageDisabled);
         buttonPrint.setToolTipText(messageDisabled);
-
     }
 
     public void enableComponents() {
@@ -118,11 +117,11 @@ public class ClientForm extends Frame {
     }
 
     private void loadData() {
-        GeneralController.loadData(choiceAllAliveAnimals, 2);
-        GeneralController.loadData(choiceAllAliveHerbivores, 5);
-        GeneralController.loadData(listAllAliveHerbivoresToFeed, 5);
-        GeneralController.loadData(listAllAlivePredators, 6);
-        GeneralController.loadData(choiceAllFood, 7);
+        GeneralController.loadData(choiceAllAliveAnimals, GeneralController.ALL_ALIVE_ANIMALS);
+        GeneralController.loadData(choiceAllAliveHerbivores, GeneralController.ALL_ALIVE_HERBIVORES);
+        GeneralController.loadData(listAllAliveHerbivoresToFeed, GeneralController.ALL_ALIVE_HERBIVORES);
+        GeneralController.loadData(listAllAlivePredators, GeneralController.ALL_ALIVE_PREDATORS);
+        GeneralController.loadData(choiceAllFood, GeneralController.ALL_FOOD);
     }
 
     private void setText() {
@@ -297,25 +296,21 @@ public class ClientForm extends Frame {
         this.add(cbPredators);
 
         listAllAlivePredators = new Choice();
-        listAllAlivePredators.add("Волк");
         listAllAlivePredators.setBounds(136, 565, 166, 24); // Видимость зависит от выбранного типа животного
         this.add(listAllAlivePredators);
         listAllAlivePredators.setVisible(false); // Если выбран чекбокс "Травоядное" - true, иначе - false
 
         listAllAliveHerbivoresToFeed = new Choice();
-        listAllAliveHerbivoresToFeed.add("Заяц");
         listAllAliveHerbivoresToFeed.setBounds(136, 565, 166, 24); // Видимость зависит от выбранного типа животного
         this.add(listAllAliveHerbivoresToFeed);
         listAllAliveHerbivoresToFeed.setVisible(false); // Если выбран чекбокс "Хищника" - true, иначе - false
 
         choiceAllAliveHerbivores = new Choice();
-        choiceAllAliveHerbivores.add("Олень");
         choiceAllAliveHerbivores.setBounds(136, 615, 166, 24);
         this.add(choiceAllAliveHerbivores);
         choiceAllAliveHerbivores.setVisible(false); // Если выбран чекбокс "Хищника" - true, иначе - false
 
         choiceAllFood = new Choice();
-        choiceAllFood.add("Трава");
         choiceAllFood.setBounds(136, 615, 166, 24);
         this.add(choiceAllFood);
         choiceAllFood.setVisible(false); // Если выбран чекбокс "Травоядное" - true, иначе - false

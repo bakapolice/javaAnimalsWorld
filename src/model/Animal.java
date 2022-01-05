@@ -43,6 +43,10 @@ public abstract class Animal implements Serializable {
                 + "; weight = " + weight;
     }
 
+    public String getShortInfo(){
+        return name + ", " + weight + " кг";
+    }
+
     public int getId() {
         return id;
     }

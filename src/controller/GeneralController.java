@@ -11,6 +11,15 @@ public class GeneralController {
     public static Storage storage;
     public static final Scanner scanner = new Scanner(System.in);
 
+
+    public final static int ALL_ANIMALS = 1;
+    public final static int ALL_ALIVE_ANIMALS = 2;
+    public final static int ALL_HERBIVORES = 3;
+    public final static int ALL_PREDATORS = 4;
+    public final static int ALL_ALIVE_HERBIVORES = 5;
+    public final static int ALL_ALIVE_PREDATORS = 6;
+    public final static int ALL_FOOD = 7;
+
     public static boolean startApp(){
         boolean isOk = Resources.startApp();
         if(isOk) storage = Storage.getInstance(Resources.initialise);
@@ -101,15 +110,29 @@ public class GeneralController {
     //---------------------------------------------------------------
 
     //Вывести -------------------------------------------------------
-    public static void print(int selection){
+    public static String print(int selection){
         switch (selection) {
-            case 1 -> System.out.println(storage.printAllAnimals());
-            case 2 -> System.out.println(storage.printAllAliveAnimals());
-            case 3 -> System.out.println(storage.printAllHerbivores());
-            case 4 -> System.out.println(storage.printAllPredators());
-            case 5 -> System.out.println(storage.printAllAliveHerbivores());
-            case 6 -> System.out.println(storage.printAllAlivePredators());
-            case 7 -> System.out.println(storage.printAllGrasses());
+            case ALL_ANIMALS -> {
+                return storage.printAllAnimals();
+            }
+            case ALL_ALIVE_ANIMALS -> {
+                return storage.printAllAliveAnimals();
+            }
+            case ALL_HERBIVORES -> {
+                return storage.printAllHerbivores();
+            }
+            case ALL_PREDATORS -> {
+                return storage.printAllPredators();
+            }
+            case ALL_ALIVE_HERBIVORES -> {
+                return storage.printAllAliveHerbivores();
+            }
+            case ALL_ALIVE_PREDATORS -> {
+                return storage.printAllAlivePredators();
+            }
+            case ALL_FOOD -> {
+                return storage.printAllGrasses();
+            }
             default -> throw new IllegalArgumentException("Неверный пункт меню!");
         }
     }
@@ -117,33 +140,33 @@ public class GeneralController {
 
     public static void loadData(Choice choice, int selection){
         switch (selection) {
-            case 1 -> {
+            case ALL_ANIMALS -> {
                 for(Animal animal : storage.getAllAnimals())
-                    choice.add(animal.getInfo());
+                    choice.insert(animal.getShortInfo(), animal.getId());
             }
-            case 2 -> {
+            case ALL_ALIVE_ANIMALS -> {
                 for(Animal animal : storage.getAllAliveAnimals())
-                    choice.add(animal.getInfo());
+                    choice.insert(animal.getShortInfo(), animal.getId());
             }
-            case 3 -> {
+            case ALL_HERBIVORES -> {
                 for(Animal animal : storage.getAllHerbivores().values())
-                    choice.add(animal.getInfo());
+                    choice.insert(animal.getShortInfo(), animal.getId());
             }
-            case 4 -> {
+            case ALL_PREDATORS -> {
                 for(Animal animal : storage.getAllPredators().values())
-                    choice.add(animal.getInfo());
+                    choice.insert(animal.getShortInfo(), animal.getId());
             }
-            case 5 -> {
+            case ALL_ALIVE_HERBIVORES -> {
                 for(Animal animal : storage.getAllAliveHerbivores().values())
-                    choice.add(animal.getInfo());
+                    choice.insert(animal.getShortInfo(), animal.getId());
             }
-            case 6 -> {
+            case ALL_ALIVE_PREDATORS -> {
                 for(Animal animal : storage.getAllAlivePredators().values())
-                    choice.add(animal.getInfo());
+                    choice.insert(animal.getShortInfo(), animal.getId());
             }
-            case 7 -> {
+            case ALL_FOOD -> {
                 for(Grass grass : storage.getAllGrasses().values())
-                    choice.add(grass.getInfo());
+                    choice.insert(grass.getShortInfo(), grass.getId());
             }
             default -> throw new IllegalArgumentException("Неверный пункт меню!");
         }

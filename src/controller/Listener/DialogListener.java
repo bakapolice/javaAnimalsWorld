@@ -41,7 +41,7 @@ public class DialogListener {
     }
 
     public static void print(int selection){
-        GeneralController.print(selection);
+        System.out.println(GeneralController.print(selection));
     }
 
     public static void save(){

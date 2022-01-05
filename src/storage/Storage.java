@@ -234,7 +234,6 @@ public class Storage implements Serializable {
         {
             ex.printStackTrace();
         }
-
     }
 
     public void load(){

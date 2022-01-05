@@ -220,25 +220,34 @@ public class ClientListener implements ActionListener, ItemListener {
             clientForm.getTextAreaErrors().append(error + "Выберите что вывести на экран!\n");
             return;
         }
+        TextArea textArea = clientForm.getTextAreaPrint();
+
         if (clientForm.getCbAllAnimals().getState()) {
-            clientForm.getTextAreaPrint().append("Вывод на экран списка всех животных\n");
+            textArea.setText(GeneralController.print(GeneralController.ALL_ANIMALS));
+            textArea.append("Вывод на экран списка всех животных\n");
         }
         if (clientForm.getCbAllAliveAnimals().getState()) {
+            textArea.setText(GeneralController.print(GeneralController.ALL_ALIVE_ANIMALS));
             clientForm.getTextAreaPrint().append("Вывод на экран списка всех живых животных\n");
         }
         if (clientForm.getCbAllHerbivores().getState()) {
+            textArea.setText(GeneralController.print(GeneralController.ALL_HERBIVORES));
             clientForm.getTextAreaPrint().append("Вывод на экран списка всех травоядных\n");
         }
         if (clientForm.getCbAllPredators().getState()) {
+            textArea.setText(GeneralController.print(GeneralController.ALL_PREDATORS));
             clientForm.getTextAreaPrint().append("Вывод на экран списка всех хищников\n");
         }
         if (clientForm.getCbAllAliveHerbivores().getState()) {
+            textArea.setText(GeneralController.print(GeneralController.ALL_ALIVE_HERBIVORES));
             clientForm.getTextAreaPrint().append("Вывод на экран списка всех живых травоядных\n");
         }
         if (clientForm.getCbAllAlivePredators().getState()) {
+            textArea.setText(GeneralController.print(GeneralController.ALL_ALIVE_PREDATORS));
             clientForm.getTextAreaPrint().append("Вывод на экран списка всех живых хищников\n");
         }
         if (clientForm.getCbAllFood().getState()) {
+            textArea.setText(GeneralController.print(GeneralController.ALL_FOOD));
             clientForm.getTextAreaPrint().append("Вывод на экран списка всей еды\n");
         }
     }

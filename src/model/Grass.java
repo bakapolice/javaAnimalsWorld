@@ -25,6 +25,10 @@ public class Grass implements Food, Serializable {
                 + "; weight = " + weight;
     }
 
+    public String getShortInfo(){
+        return name + ", " + weight + " кг";
+    }
+
     public int getId(){
         return id;
     }
