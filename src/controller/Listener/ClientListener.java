@@ -11,9 +11,6 @@ import java.util.Objects;
 
 public class ClientListener implements ActionListener, ItemListener {
     private final ClientForm clientForm;
-    private Button button;
-    private Choice choice;
-    private Checkbox checkbox;
     final String log = "[LOG] ";
     final String error = "[ERROR] ";
 
@@ -21,16 +18,13 @@ public class ClientListener implements ActionListener, ItemListener {
         this.clientForm = clientForm;
         for (Component component : clientForm.getComponents()) {
             if (component instanceof Checkbox) {
-                checkbox = (Checkbox) component;
-                checkbox.addItemListener(this);
+                ((Checkbox) component).addItemListener(this);
             }
-            if (component instanceof Button) {
-                button = (Button) component;
-                button.addActionListener(this);
+            if (component instanceof JButton) {
+                ((JButton) component).addActionListener(this);
             }
             if (component instanceof Choice) {
-                choice = (Choice) component;
-                choice.addItemListener(this);
+                ((Choice) component).addItemListener(this);
             }
         }
         this.clientForm.addWindowListener(new WindowAdapter() {
@@ -126,17 +120,17 @@ public class ClientListener implements ActionListener, ItemListener {
 
         if (selected.isEmpty()) {
             JOptionPane.showMessageDialog(clientForm, "Выберите кого создать!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-            clientForm.getTextAreaLogs().append(error + "Выберите кого создать!\n");
+            clientForm.getTextAreaErrors().append(error + "Выберите кого создать!\n");
             return;
         }
         if (name.isEmpty()) {
             JOptionPane.showMessageDialog(clientForm, "Заполните поле 'Имя'", "Внимание!", JOptionPane.WARNING_MESSAGE);
-            clientForm.getTextAreaLogs().append(error + "Заполните поле 'Имя'\n");
+            clientForm.getTextAreaErrors().append(error + "Заполните поле 'Имя'\n");
             return;
         }
         if (weigh.isEmpty()) {
             JOptionPane.showMessageDialog(clientForm, "Заполните поле 'Вес'", "Внимание!", JOptionPane.WARNING_MESSAGE);
-            clientForm.getTextAreaLogs().append(error + "Заполните поле 'Вес'\n");
+            clientForm.getTextAreaErrors().append(error + "Заполните поле 'Вес'\n");
             return;
         }
 
@@ -150,7 +144,7 @@ public class ClientListener implements ActionListener, ItemListener {
         } catch (NumberFormatException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(clientForm, "Значение поля 'Вес' введено некорректно", "Ошибка данных", JOptionPane.ERROR_MESSAGE);
-            clientForm.getTextAreaLogs().append(error + "Значение поля 'Вес' введено некорректно\n");
+            clientForm.getTextAreaErrors().append(error + "Значение поля 'Вес' введено некорректно\n");
             return;
         }
         message = log +
@@ -166,7 +160,7 @@ public class ClientListener implements ActionListener, ItemListener {
         String selected = clientForm.getChoiceAllAliveAnimals().getSelectedItem();
         if (selected.isEmpty()) {
             JOptionPane.showMessageDialog(clientForm, "Выберите кого убить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-            clientForm.getTextAreaLogs().append(error + "Выберите кого убить!\n");
+            clientForm.getTextAreaErrors().append(error + "Выберите кого убить!\n");
             return;
         }
         message = log + "Убить: " + selected;
@@ -177,7 +171,7 @@ public class ClientListener implements ActionListener, ItemListener {
         String message;
         if (clientForm.getCbgFeed().getSelectedCheckbox() == null) {
             JOptionPane.showMessageDialog(clientForm, "Выберите кого покормить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-            clientForm.getTextAreaLogs().append(error + "Выберите кого покормить!\n");
+            clientForm.getTextAreaErrors().append(error + "Выберите кого покормить!\n");
             return;
         }
 
@@ -186,12 +180,12 @@ public class ClientListener implements ActionListener, ItemListener {
             String selectedFood = clientForm.getChoiceAllFood().getSelectedItem();
             if (selectedHerbivore.isEmpty()) {
                 JOptionPane.showMessageDialog(clientForm, "Выберите кого кормить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-                clientForm.getTextAreaLogs().append(error + "Выберите кого кормить!\n");
+                clientForm.getTextAreaErrors().append(error + "Выберите кого кормить!\n");
                 return;
             }
             if (selectedFood.isEmpty()) {
                 JOptionPane.showMessageDialog(clientForm, "Выберите чем кормить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-                clientForm.getTextAreaLogs().append(error + "Выберите чем кормить!\n");
+                clientForm.getTextAreaErrors().append(error + "Выберите чем кормить!\n");
                 return;
             }
             message = log +
@@ -205,12 +199,12 @@ public class ClientListener implements ActionListener, ItemListener {
             String selectedFood = clientForm.getChoiceAllAliveHerbivores().getSelectedItem();
             if (selectedPredator.isEmpty()) {
                 JOptionPane.showMessageDialog(clientForm, "Выберите кого кормить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-                clientForm.getTextAreaLogs().append(error + "Выберите кого кормить!\n");
+                clientForm.getTextAreaErrors().append(error + "Выберите кого кормить!\n");
                 return;
             }
             if (selectedFood.isEmpty()) {
                 JOptionPane.showMessageDialog(clientForm, "Выберите чем кормить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-                clientForm.getTextAreaLogs().append(error + "Выберите чем кормить!\n");
+                clientForm.getTextAreaErrors().append(error + "Выберите чем кормить!\n");
                 return;
             }
             message = log +
@@ -223,7 +217,7 @@ public class ClientListener implements ActionListener, ItemListener {
     private void printPerform() {
         if (clientForm.getCbgPrint().getSelectedCheckbox() == null) {
             JOptionPane.showMessageDialog(clientForm, "Выберите что вывести на экран!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-            clientForm.getTextAreaLogs().append(error + "Выберите что вывести на экран!\n");
+            clientForm.getTextAreaErrors().append(error + "Выберите что вывести на экран!\n");
             return;
         }
         if (clientForm.getCbAllAnimals().getState()) {
@@ -257,12 +251,12 @@ public class ClientListener implements ActionListener, ItemListener {
         int port = 0;
         if (host.isEmpty()) {
             JOptionPane.showMessageDialog(clientForm, "Введите адрес хоста!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-            clientForm.getTextAreaLogs().append(error + "Введите адрес хоста!\n");
+            clientForm.getTextAreaErrors().append(error + "Введите адрес хоста!\n");
             return;
         }
         if (sPort.isEmpty()) {
             JOptionPane.showMessageDialog(clientForm, "Введите значение порта!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-            clientForm.getTextAreaLogs().append(error + "Введите значение порта!\n");
+            clientForm.getTextAreaErrors().append(error + "Введите значение порта!\n");
             return;
         }
 
@@ -271,7 +265,7 @@ public class ClientListener implements ActionListener, ItemListener {
         } catch (NumberFormatException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(clientForm, "Значение порта введено некорректно!", "Ошибка данных", JOptionPane.ERROR_MESSAGE);
-            clientForm.getTextAreaLogs().append(error + "Значение порта введено некорректно!\n");
+            clientForm.getTextAreaErrors().append(error + "Значение порта введено некорректно!\n");
             return;
         }
 

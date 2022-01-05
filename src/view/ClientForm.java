@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.font.TextAttribute;
 
 
 public class ClientForm extends Frame {
@@ -18,11 +19,11 @@ public class ClientForm extends Frame {
     private Label labelKill;
     private Label labelPrint;
 
-    private Button buttonCreate;
-    private Button buttonFeed;
-    private Button buttonKill;
-    private Button buttonPrint;
-    private Button buttonStart;
+    private JButton buttonCreate;
+    private JButton buttonFeed;
+    private JButton buttonKill;
+    private JButton buttonPrint;
+    private JButton buttonStart;
 
     private Choice choiceLanguage;
     private Choice listWhatToCreate;
@@ -40,6 +41,7 @@ public class ClientForm extends Frame {
 
     private TextArea textAreaPrint;
     private TextArea textAreaLogs;
+    private TextArea textAreaErrors;
 
     //Фон для отделения блоков
     private Canvas canvasSettings;
@@ -93,6 +95,13 @@ public class ClientForm extends Frame {
                 component.setEnabled(false);
             }
         }
+        buttonStart.setToolTipText("Нажмите для подключения к серверу!");
+        String messageDisabled = "Кнопка неактивна. Необходимо подключение к серверу";
+        buttonCreate.setToolTipText(messageDisabled);
+        buttonKill.setToolTipText(messageDisabled);
+        buttonFeed.setToolTipText(messageDisabled);
+        buttonPrint.setToolTipText(messageDisabled);
+
     }
 
     public void enableComponents() {
@@ -100,6 +109,11 @@ public class ClientForm extends Frame {
             component.setEnabled(true);
         choiceLanguage.setEnabled(false);
         buttonStart.setEnabled(false);
+        buttonStart.setToolTipText("Кнопка неактивна. Вы уже подключены к серверу!");
+        buttonCreate.setToolTipText(null);
+        buttonKill.setToolTipText(null);
+        buttonFeed.setToolTipText(null);
+        buttonPrint.setToolTipText(null);
         loadData();
     }
 
@@ -116,9 +130,9 @@ public class ClientForm extends Frame {
 
         labelHost.setText(Resources.rb.getString("LABEL_HOST"));
         labelPort.setText(Resources.rb.getString("LABEL_PORT"));
-        buttonStart.setLabel(Resources.rb.getString("BUTTON_START"));
+        buttonStart.setText(Resources.rb.getString("BUTTON_START"));
 
-        buttonCreate.setLabel(Resources.rb.getString("BUTTON_CREATE"));
+        buttonCreate.setText(Resources.rb.getString("BUTTON_CREATE"));
         labelCreate.setText(Resources.rb.getString("LABEL_CREATE").toUpperCase());
         labelWhoToCreate.setText(Resources.rb.getString("LABEL_WHO_TO_CREATE"));
         labelName.setText(Resources.rb.getString("LABEL_NAME"));
@@ -129,7 +143,7 @@ public class ClientForm extends Frame {
         listWhatToCreate.add(Resources.rb.getString("MESSAGE_PREDATOR"));
         listWhatToCreate.add(Resources.rb.getString("MESSAGE_GRASS"));
 
-        buttonFeed.setLabel(Resources.rb.getString("BUTTON_FEED"));
+        buttonFeed.setText(Resources.rb.getString("BUTTON_FEED"));
         labelFeed.setText(Resources.rb.getString("LABEL_FEED").toUpperCase());
         labelWhoToFeed.setText(Resources.rb.getString("LABEL_WHO_TO_FEED"));
         labelWhatToFeed.setText(Resources.rb.getString("LABEL_WHAT_TO_FEED"));
@@ -137,11 +151,11 @@ public class ClientForm extends Frame {
         cbHerbivores.setLabel(Resources.rb.getString("MESSAGE_HERBIVORE"));
         cbPredators.setLabel(Resources.rb.getString("MESSAGE_PREDATOR"));
 
-        buttonKill.setLabel(Resources.rb.getString("BUTTON_KILL"));
+        buttonKill.setText(Resources.rb.getString("BUTTON_KILL"));
         labelKill.setText(Resources.rb.getString("LABEL_KILL").toUpperCase());
         labelWhoToKill.setText(Resources.rb.getString("LABEL_WHO_TO_KILL"));
 
-        buttonPrint.setLabel(Resources.rb.getString("BUTTON_PRINT"));
+        buttonPrint.setText(Resources.rb.getString("BUTTON_PRINT"));
         labelPrint.setText(Resources.rb.getString("LABEL_PRINT").toUpperCase());
         labelWhatToPrint.setText(Resources.rb.getString("LABEL_WHAT_TO_PRINT"));
         cbAllAnimals.setLabel(Resources.rb.getString("MESSAGE_PRINT_ALL_ANIMALS"));
@@ -197,7 +211,7 @@ public class ClientForm extends Frame {
         textFieldPort.setBounds(844, 20 + 25, 100, 24);
         this.add(textFieldPort);
 
-        buttonStart = new Button();
+        buttonStart = new JButton();
         buttonStart.setBounds(1136, 15 + 25, 170, 35);
         buttonStart.setBackground(new Color(51, 53, 59));
         buttonStart.setForeground(Color.white);
@@ -211,7 +225,7 @@ public class ClientForm extends Frame {
 
 
         // Блок "Создать"
-        buttonCreate = new Button();
+        buttonCreate = new JButton();
         buttonCreate.setBounds(137, 324, 166, 30);
         buttonCreate.setBackground(new Color(51, 53, 59));
         buttonCreate.setForeground(Color.white);
@@ -250,7 +264,7 @@ public class ClientForm extends Frame {
 
 
         // Блок "Покормить"
-        buttonFeed = new Button();
+        buttonFeed = new JButton();
         buttonFeed.setBounds(137, 655, 166, 30);
         buttonFeed.setBackground(new Color(51, 53, 59));
         buttonFeed.setForeground(Color.white);
@@ -314,7 +328,7 @@ public class ClientForm extends Frame {
 
 
         // Блок "Убить"
-        buttonKill = new Button();
+        buttonKill = new JButton();
         buttonKill.setBounds(497, 324, 166, 30);
         buttonKill.setBackground(new Color(51, 53, 59));
         buttonKill.setForeground(Color.white);
@@ -342,7 +356,7 @@ public class ClientForm extends Frame {
 
 
         // Блок "Печать"
-        buttonPrint = new Button();
+        buttonPrint = new JButton();
         buttonPrint.setBounds(497, 655, 166, 30);
         buttonPrint.setBackground(new Color(51, 53, 59));
         buttonPrint.setForeground(Color.white);
@@ -403,17 +417,24 @@ public class ClientForm extends Frame {
 
 
         // Поле вывода
-        textAreaPrint = new TextArea();
+        textAreaPrint = new TextArea(null, 999, 20, TextArea.SCROLLBARS_VERTICAL_ONLY);
         textAreaPrint.setBounds(800, 120, 504, 272);
         textAreaPrint.setEditable(false);
         textAreaPrint.setBackground(new Color(214, 214, 214));
         this.add(textAreaPrint);
 
-        textAreaLogs = new TextArea();
-        textAreaLogs.setBounds(800, 445, 504, 272);
+        textAreaLogs = new TextArea(null, 999, 20, TextArea.SCROLLBARS_VERTICAL_ONLY);
+        textAreaLogs.setBounds(800, 445, 504, 133);
         textAreaLogs.setEditable(false);
         textAreaLogs.setBackground(new Color(214, 214, 214));
         this.add(textAreaLogs);
+
+        textAreaErrors = new TextArea(null, 999, 20, TextArea.SCROLLBARS_VERTICAL_ONLY);
+        textAreaErrors.setBounds(800, 584, 504, 133);
+        textAreaErrors.setEditable(false);
+        textAreaErrors.setBackground(new Color(214, 214, 214));
+        textAreaErrors.setForeground(Color.red);
+        this.add(textAreaErrors);
 
         setLayout(null);
         this.setSize(1366, 768);
@@ -424,9 +445,12 @@ public class ClientForm extends Frame {
         disableComponents();
     }
 
+
     public TextArea getTextAreaPrint() {
         return textAreaPrint;
     }
+
+    public TextArea getTextAreaErrors() {return textAreaErrors;}
 
     public TextArea getTextAreaLogs() {
         return textAreaLogs;
@@ -500,23 +524,23 @@ public class ClientForm extends Frame {
         return cbAllFood;
     }
 
-    public Button getButtonCreate() {
+    public JButton getButtonCreate() {
         return buttonCreate;
     }
 
-    public Button getButtonFeed() {
+    public JButton getButtonFeed() {
         return buttonFeed;
     }
 
-    public Button getButtonKill() {
+    public JButton getButtonKill() {
         return buttonKill;
     }
 
-    public Button getButtonPrint() {
+    public JButton getButtonPrint() {
         return buttonPrint;
     }
 
-    public Button getButtonStart() {
+    public JButton getButtonStart() {
         return buttonStart;
     }
 
