@@ -19,17 +19,31 @@ public class Main {
             return;
         }
 
-        System.out.println("Выберите режим работы");
-        System.out.println(
-                "1. Диалоговое окно\n" +
-                "2. Пользовательская форма");
-        selection = scanner.nextInt();
-        switch (selection){
-            case 1 -> showDialog();
-            case 2 -> showForm();
-            default -> throw new IllegalArgumentException("Неверный пункт меню!");
+        while (true){
+            System.out.println("Выберите режим работы");
+            System.out.println(
+                    "1. Диалоговое окно\n" +
+                            "2. Пользовательская форма\n" +
+                            "0. Выход");
+            try
+            {
+                selection = scanner.nextInt();
+                switch (selection){
+                    case 0 -> System.exit(0);
+                    case 1 -> showDialog();
+                    case 2 -> {
+                        showForm();
+                        return;
+                    }
+                    default -> System.err.println("Неверный пункт меню");
+                }
+                System.out.println(Resources.rb.getString("MESSAGE_HELLO"));
+            }
+            catch (InputMismatchException ex){
+                scanner.nextLine();
+                System.err.println("Невалидные данные!");
+            }
         }
-        System.out.println(Resources.rb.getString("MESSAGE_HELLO"));
     }
 
     private static void showForm(){
@@ -107,10 +121,10 @@ public class Main {
                     switch (selection) {
                         case 1 -> {
                             DialogListener.save();
-                            return;
+                            System.exit(0);
                         }
                         case 2 -> {
-                            return;
+                            System.exit(0);
                         }
                         default -> throw new IllegalArgumentException("Неверный пункт меню!");
                     }

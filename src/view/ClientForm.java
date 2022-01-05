@@ -73,34 +73,6 @@ public class ClientForm extends Frame {
     private Checkbox cbPredators;
 
     private ClientListener clientListener;
-    private Dialog dialog;
-
-    public void showMessage(String title, String message)
-    {
-        dialog = new Dialog(this, title, true);
-        dialog.setLayout(new FlowLayout());
-
-        dialog.setSize(200, 200);
-        dialog.setLocationRelativeTo(null);
-
-        Button ok = new Button("OK");
-        ok.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dialog.dispose();
-            }
-        });
-        dialog.add(new Label(message));
-        dialog.add(ok);
-        dialog.setVisible(true);
-
-        dialog.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                dialog.dispose();
-            }
-        });
-    }
 
     public ClientForm() {
         setupGUI();
