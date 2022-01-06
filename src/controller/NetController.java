@@ -1,14 +1,18 @@
 package controller;
 
+import Client.Client;
 import model.Animal;
 import model.Grass;
 import org.json.JSONObject;
 import storage.DataManager;
 
 import javax.xml.crypto.Data;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class NetController {
+
+    public static final int REQUEST_TYPE_CONNECT = 0;
     public static final int REQUEST_TYPE_CREATE = 1;
     public static final int REQUEST_TYPE_KILL = 2;
     public static final int REQUEST_TYPE_FEED = 3;
@@ -18,6 +22,7 @@ public class NetController {
     private static JSONObject jsonRequest;
     private static JSONObject jsonResponse;
 
+    public static Client client;
 
     private static void createJsonRequest(int command, String type, String name, Float weigh, Integer selectionId, Integer foodId, Boolean isForm) {
         jsonRequest = new JSONObject();
@@ -43,25 +48,33 @@ public class NetController {
             jsonResponse.put(String.valueOf(counter++), data);
         }
         jsonResponse.toString();
-        
+
     }
 
+    public static void sendRequestToServer(int command){
+        createJsonRequest(command, null, null, null, null, null, null);
+        client.setNewCommand(true);
+    }
 
     // На стороне клиента
     public static void sendRequestToServer(int command, int selectionId) {  //print
         createJsonRequest(command, null, null, null, selectionId, null, null);
+        client.setNewCommand(true);
     }
 
     public static void sendRequestToServer(int command, String type, String name, Float weigh) { //create
         createJsonRequest(command, type, name, weigh, null, null, null);
+        client.setNewCommand(true);
     }
 
     public static void sendRequestToServer(int command, String type, int selectionId, boolean isForm) { //kill
         createJsonRequest(command, type, null, null, selectionId, null, isForm);
+        client.setNewCommand(true);
     }
 
     public static void sendRequestToServer(int command, String type, int selectionId, int foodID, boolean isForm) { //feed
         createJsonRequest(command, type, null, null, selectionId, foodID, isForm);
+        client.setNewCommand(true);
     }
 
 //    public static void getResponseFromServer(JSONObject jsonResponse){
@@ -88,6 +101,9 @@ public class NetController {
     // На стороне сервера
     public static void getResponseFromServer(JSONObject jsonRequest) {
         switch (jsonRequest.getInt("request_type")) {
+            case REQUEST_TYPE_CONNECT -> {
+                createJsonResponse(REQUEST_TYPE_CONNECT, "Connected");
+            }
             case REQUEST_TYPE_CREATE -> {
                 if (jsonRequest.getString("creature_type").equals("Herbivore")) {
                     DataManager.createHerbivore(jsonRequest.getString("name"), (float) jsonRequest.getDouble("weigh"));
