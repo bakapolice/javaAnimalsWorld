@@ -212,7 +212,7 @@ public class ClientForm extends Frame {
         labelHost.setBackground(custom);
         this.add(labelHost);
 
-        textFieldHost = new TextField();
+        textFieldHost = new TextField("localhost");
         textFieldHost.setBounds(490, 20 + 25, 233, 24);
         this.add(textFieldHost);
 
@@ -221,7 +221,7 @@ public class ClientForm extends Frame {
         labelPort.setBackground(custom);
         this.add(labelPort);
 
-        textFieldPort = new TextField();
+        textFieldPort = new TextField("5050");
         textFieldPort.setBounds(844, 20 + 25, 100, 24);
         this.add(textFieldPort);
 
@@ -477,6 +477,8 @@ public class ClientForm extends Frame {
         setLayout(null);
         this.setSize(1366, 768);
         this.setBackground(new Color(228, 228, 228));
+
+        this.setLocationRelativeTo(null); //поставит форму в центр экрана после размещения компонентов
         setVisible(true);
 
         clientListener = new ClientListener(this);

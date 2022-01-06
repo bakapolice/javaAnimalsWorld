@@ -1,6 +1,7 @@
 package controller.Listener;
 
 import controller.GeneralController;
+import controller.NetController;
 import resources.Resources;
 import view.ClientForm;
 
@@ -31,6 +32,7 @@ public class ClientListener implements ActionListener, ItemListener {
             @Override
             public void windowClosing(WindowEvent e) {
                 GeneralController.save();
+                NetController.exitClient();
                 super.windowClosing(e);
                 System.exit(0);
             }
@@ -75,11 +77,15 @@ public class ClientListener implements ActionListener, ItemListener {
         if (e.getSource() == clientForm.getButtonStart()) {
             message = log + "Нажата кнопка " + clientForm.getButtonStart().getActionCommand();
             clientForm.getTextAreaLogs().append(message + '\n');
-            startPerform();
+            try {
+                startPerform();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
 
-        System.out.println(e.getSource());
-        System.out.println(e.getActionCommand());
+//        System.out.println(e.getSource());
+//        System.out.println(e.getActionCommand());
     }
 
     @Override
@@ -124,7 +130,7 @@ public class ClientListener implements ActionListener, ItemListener {
         }
 
 
-        System.out.println(e.getItem());
+//        System.out.println(e.getItem());
     }
 
     private void createPerform() {
@@ -302,7 +308,7 @@ public class ClientListener implements ActionListener, ItemListener {
     }
 
 
-    private void startPerform() {
+    private void startPerform() throws Exception {
         String message;
         String host = clientForm.getTextFieldHost().getText();
         String sPort = clientForm.getTextFieldPort().getText();
@@ -330,6 +336,7 @@ public class ClientListener implements ActionListener, ItemListener {
         message = log +
                 "Подключение к серверу... " +
                 host + ":" + port;
+        NetController.connectClient(host,port);
         clientForm.enableComponents();
         clientForm.getTextAreaLogs().append(message + '\n');
     }

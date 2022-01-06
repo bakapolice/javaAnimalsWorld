@@ -5,13 +5,14 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class Client implements Runnable {
     private Socket socket = null;
     private boolean isConnected;
     private boolean newCommand;
-    private OutputStreamWriter outputStreamWriter;
-    private InputStreamReader inputStreamReader;
+    private ObjectOutputStream objectOutputStream;
+    private ObjectInputStream objectInputStream;
 
     public void connect(String host, int port) throws IOException {
         socket = new Socket(host, port);
@@ -30,25 +31,22 @@ public class Client implements Runnable {
         try {
             NetController.sendRequestToServer(NetController.REQUEST_TYPE_CONNECT);
             while (isConnected) {
-                //while (!newCommand)
-                outputStreamWriter = new OutputStreamWriter(socket.getOutputStream());
-
+                while (!newCommand) Thread.sleep(100);
+                String serverRequest = NetController.getJsonRequest().toString();
+                objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+                System.out.println("Новая команда");
                 while (newCommand) {
-                    outputStreamWriter.write(NetController.getJsonRequest().toString());
+                    JSONObject tmp = new JSONObject(serverRequest);
+                    objectOutputStream.writeObject(serverRequest);
 
-                    inputStreamReader = new InputStreamReader(socket.getInputStream());
-                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                    String line = null;
-                    StringBuilder data = new StringBuilder();
-                    while((line  = bufferedReader.readLine())!=null){
-                        data.append(line);
-                    }
-                    NetController.getResponseFromServer(new JSONObject(data));
+                    objectInputStream = new ObjectInputStream(socket.getInputStream());
+                    String serverResponse = objectInputStream.readObject().toString();
+
+                    NetController.getResponseFromServer(new JSONObject(serverResponse));
                     newCommand = false;
                 }
-
             }
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException | InterruptedException e) {
             e.printStackTrace();
         }
     }

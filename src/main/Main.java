@@ -14,7 +14,7 @@ public class Main {
     private static final Scanner scanner = new Scanner(System.in);
     public static void main(String[] args) throws IOException {
         int selection = 0;
-        if(!GeneralController.startApp()){
+        if(!Resources.startApp()){
             System.out.println(Resources.rb.getString("MESSAGE_SETUP_ERROR"));
             return;
         }
@@ -30,9 +30,12 @@ public class Main {
                 selection = scanner.nextInt();
                 switch (selection){
                     case 0 -> System.exit(0);
-                    case 1 -> showDialog();
+                    case 1 -> {
+                        GeneralController.startApp(false);
+                        showDialog();
+                    }
                     case 2 -> {
-                        showForm();
+                        GeneralController.startApp(true);
                         return;
                     }
                     default -> System.err.println("Неверный пункт меню");
@@ -44,10 +47,6 @@ public class Main {
                 System.err.println("Невалидные данные!");
             }
         }
-    }
-
-    private static void showForm(){
-        ClientForm form = new ClientForm();
     }
 
     private static void showDialog() throws IOException {

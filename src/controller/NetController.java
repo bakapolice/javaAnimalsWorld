@@ -1,14 +1,8 @@
 package controller;
 
 import Client.Client;
-import model.Animal;
-import model.Grass;
 import org.json.JSONObject;
-import storage.DataManager;
 
-import javax.xml.crypto.Data;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class NetController {
 
@@ -23,6 +17,49 @@ public class NetController {
     private static JSONObject jsonResponse;
 
     public static Client client;
+
+    public static void startApp(){
+        try {
+            client = new Client();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void connectClient(String host, int port) throws Exception {
+        try {
+            client.connect(host, port);
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+            throw new Exception("Невозможно подключиться к указанному серверу!");
+        }
+    }
+
+    public static boolean disconnectClient(){
+        try {
+            if(client.isConnected())
+            client.disconnect();
+            return true;
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean exitClient(){
+        try{
+            if(client.isConnected())
+                client.disconnect();
+            return true;
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+            return false;
+        }
+    }
 
     private static void createJsonRequest(int command, String type, String name, Float weigh, Integer selectionId, Integer foodId, Boolean isForm) {
         jsonRequest = new JSONObject();
@@ -48,7 +85,6 @@ public class NetController {
             jsonResponse.put(String.valueOf(counter++), data);
         }
         jsonResponse.toString();
-
     }
 
     public static void sendRequestToServer(int command){
@@ -56,7 +92,6 @@ public class NetController {
         client.setNewCommand(true);
     }
 
-    // На стороне клиента
     public static void sendRequestToServer(int command, int selectionId) {  //print
         createJsonRequest(command, null, null, null, selectionId, null, null);
         client.setNewCommand(true);
@@ -77,74 +112,34 @@ public class NetController {
         client.setNewCommand(true);
     }
 
-//    public static void getResponseFromServer(JSONObject jsonResponse){
-//        switch (jsonRequest.getInt("request_type")){
-//            case REQUEST_TYPE_CREATE -> {
-//                //Вывести на форму полученную информацию с сервера.
-//                //Перезагрузить данные на форме
-//            }
-//            case REQUEST_TYPE_KILL -> {
-//                //Вывести на форму полученную информацию с сервера.
-//                //Перезагрузить данные формы
-//            }
-//            case REQUEST_TYPE_FEED -> {
-//                //Вывести на форму полученную информацию с сервера.
-//                //Перезагрузить данные
-//            }
-//            case REQUEST_TYPE_PRINT -> {
-//                //Вывести на форму полученную информацию с сервера.
-//            }
-//        }
-//    }
-
-
-    // На стороне сервера
-    public static void getResponseFromServer(JSONObject jsonRequest) {
-        switch (jsonRequest.getInt("request_type")) {
+    public static void getResponseFromServer(JSONObject jsonResponse){
+        System.out.println(jsonResponse.toString());
+        switch (jsonRequest.getInt("request_type")){
             case REQUEST_TYPE_CONNECT -> {
-                createJsonResponse(REQUEST_TYPE_CONNECT, "Connected");
+                if(client.isConnected()){
+                    //Вывести на экран формы сообщение
+                }
             }
             case REQUEST_TYPE_CREATE -> {
-                if (jsonRequest.getString("creature_type").equals("Herbivore")) {
-                    DataManager.createHerbivore(jsonRequest.getString("name"), (float) jsonRequest.getDouble("weigh"));
-                }
-                if (jsonRequest.getString("creature_type").equals("Predator")) {
-                    DataManager.createHerbivore(jsonRequest.getString("name"), (float) jsonRequest.getDouble("weigh"));
-                }
-                if (jsonRequest.getString("creature_type").equals("Grass")) {
-                    DataManager.createHerbivore(jsonRequest.getString("name"), (float) jsonRequest.getDouble("weigh"));
-                }
-                String message = "Создано: + " + jsonRequest.getString("creature_type") + jsonRequest.getString("name") + jsonRequest.getString("weigh");
-                createJsonResponse(jsonRequest.getInt("request_type"), message);
+                //Вывести на форму полученную информацию с сервера.
+                //Перезагрузить данные на форме
             }
             case REQUEST_TYPE_KILL -> {
-                if (jsonRequest.getString("creature_type").equals("Herbivore")) {
-                    DataManager.killHerbivore(jsonRequest.getInt("selection_id"), jsonRequest.getBoolean("is_form"));
-                }
-                if (jsonRequest.getString("creature_type").equals("Predator")) {
-                    DataManager.killPredator(jsonRequest.getInt("selection_id"), jsonRequest.getBoolean("is_form"));
-                }
-                String message = "Убит: + " + jsonRequest.getString("creature_type");
-                createJsonResponse(jsonRequest.getInt("request_type"), message);
+                //Вывести на форму полученную информацию с сервера.
+                //Перезагрузить данные формы
             }
             case REQUEST_TYPE_FEED -> {
-                if (jsonRequest.getString("creature_type").equals("Herbivore")) {
-                    DataManager.feedHerbivore(jsonRequest.getInt("selection_id"), jsonRequest.getInt("food_id"), jsonRequest.getBoolean("is_form"));
-                }
-                if (jsonRequest.getString("creature_type").equals("Predator")) {
-                    DataManager.feedHerbivore(jsonRequest.getInt("selection_id"), jsonRequest.getInt("food_id"), jsonRequest.getBoolean("is_form"));
-                }
-                String message = "Убит: + " + jsonRequest.getString("creature_type");
-                createJsonResponse(jsonRequest.getInt("request_type"), message);
+                //Вывести на форму полученную информацию с сервера.
+                //Перезагрузить данные
             }
             case REQUEST_TYPE_PRINT -> {
-                String message = DataManager.print(jsonRequest.getInt("selection_id"));
-                createJsonResponse(jsonRequest.getInt("request_type"), message);
+                //Вывести на форму полученную информацию с сервера.
             }
-            case REQUEST_TYPE_LOAD -> createJsonResponse(jsonRequest.getInt("request_type"), jsonRequest.getInt("selection_id"), DataManager.loadData(jsonRequest.getInt("selection_id")));
+            case REQUEST_TYPE_LOAD -> {
+
+            }
         }
     }
-
 
     public static JSONObject getJsonRequest() {
         return jsonRequest;
