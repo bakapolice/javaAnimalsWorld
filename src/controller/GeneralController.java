@@ -1,13 +1,9 @@
 package controller;
 
-import model.*;
 import resources.Resources;
 import storage.DataManager;
-import storage.Storage;
 
-import javax.xml.crypto.Data;
 import java.awt.*;
-import java.util.Scanner;
 
 public class GeneralController {
     public static boolean isStarted;
@@ -42,16 +38,8 @@ public class GeneralController {
 
 
     //Убить ---------------------------------------------------------
-    public static void killHerbivore(int selection){
-        DataManager.killHerbivore(selection);
-    }
-
     public static void killHerbivore(int selection, boolean form){
         DataManager.killHerbivore(selection,form);
-    }
-
-    public static void killPredator(int selection){
-        DataManager.killPredator(selection);
     }
 
     public static void killPredator(int selection, boolean form){
@@ -60,16 +48,8 @@ public class GeneralController {
     //---------------------------------------------------------------
 
     //Покормить -----------------------------------------------------
-    public static void feedHerbivore(int selection, int foodID){
-        DataManager.feedHerbivore(selection, foodID);
-    }
-
     public static void feedHerbivore(int selection, int foodID, boolean form){
         DataManager.feedHerbivore(selection, foodID, form);
-    }
-
-    public static void feedPredator(int selection, int foodID){
-        DataManager.feedPredator(selection, foodID);
     }
 
     public static void feedPredator(int selection, int foodID, boolean form){
@@ -83,8 +63,8 @@ public class GeneralController {
     }
     //---------------------------------------------------------------
 
-    public static void loadData(Choice choice, int selection){
-        DataManager.loadData(choice,selection);
+    public static String[] loadData(int selection){
+        return DataManager.loadData(selection);
     }
 
     public static void save(){

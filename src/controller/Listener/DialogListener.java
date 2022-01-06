@@ -54,7 +54,7 @@ public class DialogListener {
         //Выбрать травоядное
         System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHO_TO_KILL"));
         int selection = scanner.nextInt();
-        GeneralController.killHerbivore(selection);
+        GeneralController.killHerbivore(selection, false);
     }
 
     public static void killPredator(){
@@ -63,7 +63,7 @@ public class DialogListener {
         //Выбрать хищника
         System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHO_TO_KILL"));
         int selection = scanner.nextInt();
-        GeneralController.killPredator(selection);
+        GeneralController.killPredator(selection,false);
     }
 
     public static void feedHerbivore(){
@@ -78,7 +78,7 @@ public class DialogListener {
         System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHAT_TO_FEED"));
         int foodID = scanner.nextInt();
 
-        GeneralController.feedHerbivore(selection, foodID);
+        GeneralController.feedHerbivore(selection, foodID, false);
     }
 
     public static void feedPredator(){
@@ -92,6 +92,6 @@ public class DialogListener {
         System.out.println(GeneralController.print(GeneralController.ALL_ALIVE_HERBIVORES));
         System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHAT_TO_FEED"));
         int foodID = scanner.nextInt();
-        GeneralController.feedPredator(selection, foodID);
+        GeneralController.feedPredator(selection, foodID, false);
     }
 }

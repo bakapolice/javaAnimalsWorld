@@ -131,12 +131,18 @@ public class ClientForm extends Frame {
         listAllAlivePredators.removeAll();
         choiceAllFood.removeAll();
 
-        GeneralController.loadData(choiceAllAliveHerbivoresKill, GeneralController.ALL_ALIVE_HERBIVORES);
-        GeneralController.loadData(choiceAllAlivePredatorsKill, GeneralController.ALL_ALIVE_PREDATORS);
-        GeneralController.loadData(choiceAllAliveHerbivores, GeneralController.ALL_ALIVE_HERBIVORES);
-        GeneralController.loadData(listAllAliveHerbivoresToFeed, GeneralController.ALL_ALIVE_HERBIVORES);
-        GeneralController.loadData(listAllAlivePredators, GeneralController.ALL_ALIVE_PREDATORS);
-        GeneralController.loadData(choiceAllFood, GeneralController.ALL_FOOD);
+        for(String str : GeneralController.loadData(GeneralController.ALL_ALIVE_HERBIVORES))
+            choiceAllAliveHerbivoresKill.add(str);
+        for(String str : GeneralController.loadData(GeneralController.ALL_ALIVE_PREDATORS))
+            choiceAllAlivePredatorsKill.add(str);
+        for(String str : GeneralController.loadData(GeneralController.ALL_ALIVE_HERBIVORES))
+            choiceAllAliveHerbivores.add(str);
+        for(String str : GeneralController.loadData(GeneralController.ALL_ALIVE_HERBIVORES))
+            listAllAliveHerbivoresToFeed.add(str);
+        for(String str : GeneralController.loadData(GeneralController.ALL_ALIVE_PREDATORS))
+            listAllAlivePredators.add(str);
+        for(String str : GeneralController.loadData(GeneralController.ALL_FOOD))
+            choiceAllFood.add(str);
     }
 
     private void setText() {
