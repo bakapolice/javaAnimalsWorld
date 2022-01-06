@@ -42,12 +42,7 @@ public class DataManager {
 
 
     //Убить ---------------------------------------------------------
-    public static void killHerbivore(){
-        //Список всех живых травоядных
-        System.out.println(storage.printAllAliveHerbivores());
-        //Выбрать травоядное
-        System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHO_TO_KILL"));
-        int selection = scanner.nextInt();
+    public static void killHerbivore(int selection){
         Herbivore herbivore = storage.findHerbivoreById(selection);
         //Убить травоядное
         herbivore.die();
@@ -55,33 +50,41 @@ public class DataManager {
         storage.update(herbivore);
     }
 
-    public static void killPredator(){
-        //Список всех живых хищников
-        System.out.println(storage.printAllAlivePredators());
-        //Выбрать хищника
-        System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHO_TO_KILL"));
-        int selection = scanner.nextInt();
+    public static void killHerbivore(int selection, boolean form){
+        if(form){
+            int herbivoreID = storage.getAllAliveHerbivores().get(selection).getId();
+            Herbivore herbivore = storage.findHerbivoreById(herbivoreID);
+            //Убить травоядное
+            herbivore.die();
+            //Обновить статус в хранилище на "Убит"
+            storage.update(herbivore);
+        }
+    }
+
+    public static void killPredator(int selection){
         Predator predator = storage.findPredatorById(selection);
         //Убить хищника
         predator.die();
         //Обновить статус в хранилище на "Убит"
         storage.update(predator);
     }
+
+    public static void killPredator(int selection, boolean form){
+        if(form){
+            int predatorID = storage.getAllAlivePredators().get(selection).getId();
+            Predator predator = storage.findPredatorById(predatorID);
+            //Убить хищника
+            predator.die();
+            //Обновить статус в хранилище на "Убит"
+            storage.update(predator);
+        }
+    }
     //---------------------------------------------------------------
 
     //Покормить -----------------------------------------------------
-    public static void feedHerbivore(){
-        //Список всех живых травоядных
-        System.out.println(storage.printAllAliveHerbivores());
-        //Выбрать травоядное
-        System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHO_TO_FEED"));
-        int selection = scanner.nextInt();
+    public static void feedHerbivore(int selection, int foodID){
         Herbivore herbivore = storage.findHerbivoreById(selection);
-        //Выбрать чем кормить
-        System.out.println(storage.printAllGrasses());
-        System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHAT_TO_FEED"));
-        selection = scanner.nextInt();
-        Grass grass = storage.findGrassById(selection);
+        Grass grass = storage.findGrassById(foodID);
         //Покормить
         herbivore.eat(grass);
         //Обновить данные
@@ -89,24 +92,45 @@ public class DataManager {
         storage.update(grass);
     }
 
-    public static void feedPredator(){
-        //Список всех живых хищников
-        System.out.println(storage.printAllAlivePredators());
-        //Выбрать хищника
-        System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHO_TO_FEED"));
-        int selection = scanner.nextInt();
+    public static void feedHerbivore(int selection, int foodID, boolean form){
+        if(form)
+        {
+            int herbivoreID = storage.getAllAliveHerbivores().get(selection).getId();
+            Herbivore herbivore = storage.findHerbivoreById(herbivoreID);
+            Grass grass = storage.findGrassById(foodID);
+            //Покормить
+            herbivore.eat(grass);
+            //Обновить данные
+            storage.update(herbivore);
+            storage.update(grass);
+        }
+    }
+
+    public static void feedPredator(int selection, int foodID){
         Predator predator = storage.findPredatorById(selection);
-        //Выбрать чем кормить
-        System.out.println(storage.printAllAliveHerbivores());
-        System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHAT_TO_FEED"));
-        selection = scanner.nextInt();
-        Herbivore herbivore = storage.findHerbivoreById(selection);
+        Herbivore herbivore = storage.findHerbivoreById(foodID);
         //Покормить
         predator.eat(herbivore);
         //Обновить данные
         storage.update(predator);
         storage.update(herbivore);
     }
+
+    public static void feedPredator(int selection, int foodID, boolean form){
+        if(form){
+            int predID = storage.getAllAlivePredators().get(selection).getId();
+            int herbID = storage.getAllAliveHerbivores().get(foodID).getId();
+
+            Predator predator = storage.findPredatorById(predID);
+            Herbivore herbivore = storage.findHerbivoreById(herbID);
+            //Покормить
+            predator.eat(herbivore);
+            //Обновить данные
+            storage.update(predator);
+            storage.update(herbivore);
+        }
+    }
+
     //---------------------------------------------------------------
 
     //Вывести -------------------------------------------------------
@@ -142,31 +166,31 @@ public class DataManager {
         switch (selection) {
             case ALL_ANIMALS -> {
                 for(Animal animal : storage.getAllAnimals())
-                    choice.insert(animal.getShortInfo(), animal.getId());
+                    choice.add(animal.getShortInfo());
             }
             case ALL_ALIVE_ANIMALS -> {
                 for(Animal animal : storage.getAllAliveAnimals())
-                    choice.insert(animal.getShortInfo(), animal.getId());
+                    choice.add(animal.getShortInfo());
             }
             case ALL_HERBIVORES -> {
                 for(Animal animal : storage.getAllHerbivores().values())
-                    choice.insert(animal.getShortInfo(), animal.getId());
+                    choice.add(animal.getShortInfo());
             }
             case ALL_PREDATORS -> {
                 for(Animal animal : storage.getAllPredators().values())
-                    choice.insert(animal.getShortInfo(), animal.getId());
+                    choice.add(animal.getShortInfo());
             }
             case ALL_ALIVE_HERBIVORES -> {
                 for(Animal animal : storage.getAllAliveHerbivores().values())
-                    choice.insert(animal.getShortInfo(), animal.getId());
+                    choice.add(animal.getShortInfo());
             }
             case ALL_ALIVE_PREDATORS -> {
                 for(Animal animal : storage.getAllAlivePredators().values())
-                    choice.insert(animal.getShortInfo(), animal.getId());
+                    choice.add(animal.getShortInfo());
             }
             case ALL_FOOD -> {
                 for(Grass grass : storage.getAllGrasses().values())
-                    choice.insert(grass.getShortInfo(), grass.getId());
+                    choice.add(grass.getShortInfo());
             }
             default -> throw new IllegalArgumentException("Неверный пункт меню!");
         }

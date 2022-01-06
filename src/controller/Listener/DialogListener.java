@@ -49,18 +49,49 @@ public class DialogListener {
     }
 
     public static void killHerbivore(){
-        GeneralController.killHerbivore();
+        //Список всех живых травоядных
+        System.out.println(GeneralController.print(GeneralController.ALL_ALIVE_HERBIVORES));
+        //Выбрать травоядное
+        System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHO_TO_KILL"));
+        int selection = scanner.nextInt();
+        GeneralController.killHerbivore(selection);
     }
 
     public static void killPredator(){
-        GeneralController.killPredator();
+        //Список всех живых хищников
+        System.out.println(GeneralController.print(GeneralController.ALL_ALIVE_PREDATORS));
+        //Выбрать хищника
+        System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHO_TO_KILL"));
+        int selection = scanner.nextInt();
+        GeneralController.killPredator(selection);
     }
 
     public static void feedHerbivore(){
-        GeneralController.feedHerbivore();
+        //Список всех живых травоядных
+        System.out.println(GeneralController.print(GeneralController.ALL_ALIVE_HERBIVORES));
+        //Выбрать травоядное
+        System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHO_TO_FEED"));
+        int selection = scanner.nextInt();
+
+        //Выбрать чем кормить
+        System.out.println(GeneralController.print(GeneralController.ALL_FOOD));
+        System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHAT_TO_FEED"));
+        int foodID = scanner.nextInt();
+
+        GeneralController.feedHerbivore(selection, foodID);
     }
 
     public static void feedPredator(){
-        GeneralController.feedPredator();
+        //Список всех живых хищников
+        System.out.println(GeneralController.print(GeneralController.ALL_ALIVE_PREDATORS));
+        //Выбрать хищника
+        System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHO_TO_FEED"));
+        int selection = scanner.nextInt();
+
+        //Выбрать чем кормить
+        System.out.println(GeneralController.print(GeneralController.ALL_ALIVE_HERBIVORES));
+        System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHAT_TO_FEED"));
+        int foodID = scanner.nextInt();
+        GeneralController.feedPredator(selection, foodID);
     }
 }

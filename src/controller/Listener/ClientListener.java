@@ -105,10 +105,25 @@ public class ClientListener implements ActionListener, ItemListener {
             clientForm.getTextAreaLogs().append(log + "Язык формы изменен\n");
             if (!Objects.equals(clientForm.getChoiceLanguage().getSelectedItem(), Resources.locale.getLanguage())) {
                 Resources.setLocale(clientForm.getChoiceLanguage().getSelectedItem());
-                //System.out.println(Resources.locale.getLanguage());
                 clientForm.refresh();
             }
         }
+
+        if (e.getSource() == clientForm.getCbPredatorsKill())
+        {
+            clientForm.getTextAreaLogs().append(log + "Выбран чекбокс:" + e.getItem() + '\n');
+            clientForm.getChoiceAllAlivePredatorsKill().setVisible(true);
+            clientForm.getChoiceAllAliveHerbivoresKill().setVisible(false);
+        }
+
+        if (e.getSource() == clientForm.getCbHerbivoresKill())
+        {
+            clientForm.getTextAreaLogs().append(log + "Выбран чекбокс:" + e.getItem() + '\n');
+            clientForm.getChoiceAllAliveHerbivoresKill().setVisible(true);
+            clientForm.getChoiceAllAlivePredatorsKill().setVisible(false);
+        }
+
+
         System.out.println(e.getItem());
     }
 
@@ -136,17 +151,18 @@ public class ClientListener implements ActionListener, ItemListener {
 
         try {
             float fWeigh = Float.parseFloat(weigh);
-//                            switch (clientForm.getListWhatToCreate().getSelectedIndex()){
-//                                case 0 -> GeneralController.createHerbivore(name, fWeigh);
-//                                case 1 -> GeneralController.createPredator(name, fWeigh);
-//                                case 2 -> GeneralController.createGrass(name, fWeigh);
-//                            }
+                            switch (clientForm.getListWhatToCreate().getSelectedIndex()){
+                                case 0 -> GeneralController.createHerbivore(name, fWeigh);
+                                case 1 -> GeneralController.createPredator(name, fWeigh);
+                                case 2 -> GeneralController.createGrass(name, fWeigh);
+                            }
         } catch (NumberFormatException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(clientForm, "Значение поля 'Вес' введено некорректно", "Ошибка данных", JOptionPane.ERROR_MESSAGE);
             clientForm.getTextAreaErrors().append(error + "Значение поля 'Вес' введено некорректно\n");
             return;
         }
+        clientForm.loadData();
         message = log +
                 "Создать: " + selected + "; " +
                 "Имя: " + name + "; " +
@@ -157,14 +173,39 @@ public class ClientListener implements ActionListener, ItemListener {
 
     private void killPerform() {
         String message;
-        String selected = clientForm.getChoiceAllAliveAnimals().getSelectedItem();
-        if (selected.isEmpty()) {
+        if (clientForm.getCbgKill().getSelectedCheckbox() == null) {
             JOptionPane.showMessageDialog(clientForm, "Выберите кого убить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
             clientForm.getTextAreaErrors().append(error + "Выберите кого убить!\n");
             return;
         }
-        message = log + "Убить: " + selected;
-        clientForm.getTextAreaLogs().append(message + '\n');
+
+        if (clientForm.getCbHerbivoresKill().getState()) {
+            String selectedHerbivore = clientForm.getChoiceAllAliveHerbivoresKill().getSelectedItem();
+            if (selectedHerbivore.isEmpty()) {
+                JOptionPane.showMessageDialog(clientForm, "Выберите какого травоядного убить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
+                clientForm.getTextAreaErrors().append(error + "Выберите какого травоядного убить!\n");
+                return;
+            }
+            GeneralController.killHerbivore(clientForm.getChoiceAllAliveHerbivoresKill().getSelectedIndex(), true);
+            clientForm.loadData();
+            message = log +
+                    "Убить травоядное " + selectedHerbivore;
+            clientForm.getTextAreaLogs().append(message + '\n');
+        }
+
+        if (clientForm.getCbPredatorsKill().getState()) {
+            String selectedPredator = clientForm.getChoiceAllAlivePredatorsKill().getSelectedItem();
+            if (selectedPredator.isEmpty()) {
+                JOptionPane.showMessageDialog(clientForm, "Выберите какого хищника убить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
+                clientForm.getTextAreaErrors().append(error + "Выберите какого хищника убить!\n");
+                return;
+            }
+            GeneralController.killPredator(clientForm.getChoiceAllAlivePredatorsKill().getSelectedIndex(), true);
+            clientForm.loadData();
+            message = log +
+                    "Убить хищника " + selectedPredator;
+            clientForm.getTextAreaLogs().append(message + '\n');
+        }
     }
 
     private void feedPerform() {
@@ -179,8 +220,8 @@ public class ClientListener implements ActionListener, ItemListener {
             String selectedHerbivore = clientForm.getListAllAliveHerbivoresToFeed().getSelectedItem();
             String selectedFood = clientForm.getChoiceAllFood().getSelectedItem();
             if (selectedHerbivore.isEmpty()) {
-                JOptionPane.showMessageDialog(clientForm, "Выберите кого кормить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-                clientForm.getTextAreaErrors().append(error + "Выберите кого кормить!\n");
+                JOptionPane.showMessageDialog(clientForm, "Выберите какого травоядного кормить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
+                clientForm.getTextAreaErrors().append(error + "Выберите какого травоядного кормить!\n");
                 return;
             }
             if (selectedFood.isEmpty()) {
@@ -188,6 +229,10 @@ public class ClientListener implements ActionListener, ItemListener {
                 clientForm.getTextAreaErrors().append(error + "Выберите чем кормить!\n");
                 return;
             }
+            int herbivoreID = clientForm.getListAllAliveHerbivoresToFeed().getSelectedIndex();
+            int foodID = clientForm.getChoiceAllFood().getSelectedIndex();
+            GeneralController.feedHerbivore(herbivoreID, foodID, true);
+            clientForm.loadData();
             message = log +
                     "Покормить травоядное " + selectedHerbivore +
                     "; Еда: " + selectedFood;
@@ -198,8 +243,8 @@ public class ClientListener implements ActionListener, ItemListener {
             String selectedPredator = clientForm.getListAllAlivePredators().getSelectedItem();
             String selectedFood = clientForm.getChoiceAllAliveHerbivores().getSelectedItem();
             if (selectedPredator.isEmpty()) {
-                JOptionPane.showMessageDialog(clientForm, "Выберите кого кормить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-                clientForm.getTextAreaErrors().append(error + "Выберите кого кормить!\n");
+                JOptionPane.showMessageDialog(clientForm, "Выберите какого хищника кормить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
+                clientForm.getTextAreaErrors().append(error + "Выберите какого хищника кормить!\n");
                 return;
             }
             if (selectedFood.isEmpty()) {
@@ -207,6 +252,10 @@ public class ClientListener implements ActionListener, ItemListener {
                 clientForm.getTextAreaErrors().append(error + "Выберите чем кормить!\n");
                 return;
             }
+            int predatorID = clientForm.getListAllAlivePredators().getSelectedIndex();
+            int herbivoreID = clientForm.getChoiceAllAliveHerbivores().getSelectedIndex();
+            GeneralController.feedPredator(predatorID, herbivoreID, true);
+            clientForm.loadData();
             message = log +
                     "Покормить хищника " + selectedPredator +
                     "; Еда: " + selectedFood;

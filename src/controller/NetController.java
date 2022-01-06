@@ -42,10 +42,10 @@ public class NetController {
             }
             case REQUEST_TYPE_KILL -> {
                 if(serverRequest.getType().equals("Herbivore")){
-                    DataManager.killHerbivore();
+                    //DataManager.killHerbivore();
                 }
                 if(serverRequest.getType().equals("Predator")){
-                    DataManager.killPredator();
+                    //DataManager.killPredator();
                 }
                 String data = "Убит: + " + serverRequest.getType() + serverRequest.getName() + serverRequest.getWeigh();
                 serverResponse = new ServerResponse(serverRequest.getCommand(), data);

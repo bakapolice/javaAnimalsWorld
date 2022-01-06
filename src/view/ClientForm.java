@@ -27,7 +27,6 @@ public class ClientForm extends Frame {
 
     private Choice choiceLanguage;
     private Choice listWhatToCreate;
-    private Choice choiceAllAliveAnimals;
     private Choice listAllAlivePredators; // Список живых хищников для выбора "кого кормить"
     private Choice listAllAliveHerbivoresToFeed; // Список живых травоядных для выбора "кого кормить"
     private Choice choiceAllAliveHerbivores; // Список живых травоядных для выбора "чем кормить"
@@ -74,6 +73,13 @@ public class ClientForm extends Frame {
     private Checkbox cbHerbivores;
     private Checkbox cbPredators;
 
+    private CheckboxGroup cbgKill;
+    private Checkbox cbHerbivoresKill;
+    private Checkbox cbPredatorsKill;
+    private Choice choiceAllAlivePredatorsKill;
+    private Choice choiceAllAliveHerbivoresKill;
+
+
     private ClientListener clientListener;
 
     public ClientForm() {
@@ -116,8 +122,17 @@ public class ClientForm extends Frame {
         loadData();
     }
 
-    private void loadData() {
-        GeneralController.loadData(choiceAllAliveAnimals, GeneralController.ALL_ALIVE_ANIMALS);
+    public void loadData() {
+        choiceAllAliveHerbivoresKill.removeAll();
+        choiceAllAlivePredatorsKill.removeAll();
+        choiceAllAliveHerbivores.removeAll();
+        listAllAliveHerbivoresToFeed.removeAll();
+        listAllAlivePredators.removeAll();
+        listAllAlivePredators.removeAll();
+        choiceAllFood.removeAll();
+
+        GeneralController.loadData(choiceAllAliveHerbivoresKill, GeneralController.ALL_ALIVE_HERBIVORES);
+        GeneralController.loadData(choiceAllAlivePredatorsKill, GeneralController.ALL_ALIVE_PREDATORS);
         GeneralController.loadData(choiceAllAliveHerbivores, GeneralController.ALL_ALIVE_HERBIVORES);
         GeneralController.loadData(listAllAliveHerbivoresToFeed, GeneralController.ALL_ALIVE_HERBIVORES);
         GeneralController.loadData(listAllAlivePredators, GeneralController.ALL_ALIVE_PREDATORS);
@@ -153,6 +168,8 @@ public class ClientForm extends Frame {
         buttonKill.setText(Resources.rb.getString("BUTTON_KILL"));
         labelKill.setText(Resources.rb.getString("LABEL_KILL").toUpperCase());
         labelWhoToKill.setText(Resources.rb.getString("LABEL_WHO_TO_KILL"));
+        cbHerbivoresKill.setLabel(Resources.rb.getString("MESSAGE_HERBIVORE"));
+        cbPredatorsKill.setLabel(Resources.rb.getString("MESSAGE_PREDATOR"));
 
         buttonPrint.setText(Resources.rb.getString("BUTTON_PRINT"));
         labelPrint.setText(Resources.rb.getString("LABEL_PRINT").toUpperCase());
@@ -172,14 +189,6 @@ public class ClientForm extends Frame {
         Color custom = new Color(205, 205, 205);
 
         // Полоса настроек
-        textFieldName = new TextField();
-        textFieldName.setBounds(136, 240, 166, 24);
-        this.add(textFieldName);
-
-        textFieldWeight = new TextField();
-        textFieldWeight.setBounds(136, 286, 166, 24);
-        this.add(textFieldWeight);
-
         labelLanguage = new Label();
         labelLanguage.setBounds(59, 20 + 25, 60, 30);
         labelLanguage.setBackground(custom);
@@ -224,6 +233,15 @@ public class ClientForm extends Frame {
 
 
         // Блок "Создать"
+        textFieldName = new TextField();
+        textFieldName.setBounds(136, 240, 166, 24);
+        this.add(textFieldName);
+
+        textFieldWeight = new TextField();
+        textFieldWeight.setBounds(136, 286, 166, 24);
+        this.add(textFieldWeight);
+
+
         buttonCreate = new JButton();
         buttonCreate.setBounds(137, 324, 166, 30);
         buttonCreate.setBackground(new Color(51, 53, 59));
@@ -251,7 +269,6 @@ public class ClientForm extends Frame {
         this.add(labelWeight);
 
         listWhatToCreate = new Choice();
-        listWhatToCreate.removeAll();
         listWhatToCreate.setBounds(136, 196, 166, 24);
         this.add(listWhatToCreate);
 
@@ -339,9 +356,29 @@ public class ClientForm extends Frame {
         labelWhoToKill.setBackground(custom);
         this.add(labelWhoToKill);
 
-        choiceAllAliveAnimals = new Choice();
-        choiceAllAliveAnimals.setBounds(494, 196, 166, 24);
-        this.add(choiceAllAliveAnimals);
+
+
+        // Блок "Убить" -----------------------
+        cbgKill = new CheckboxGroup();
+        cbHerbivoresKill = new Checkbox("", cbgKill, false);
+        cbHerbivoresKill.setBounds(494, 196, 150, 15);
+        cbHerbivoresKill.setBackground(custom);
+        this.add(cbHerbivoresKill);
+
+        cbPredatorsKill = new Checkbox("", cbgKill, false);
+        cbPredatorsKill.setBounds(494, 212, 150, 15);
+        cbPredatorsKill.setBackground(custom);
+        this.add(cbPredatorsKill);
+
+        choiceAllAlivePredatorsKill = new Choice();
+        choiceAllAlivePredatorsKill.setBounds(494, 240, 166, 24); // Видимость зависит от выбранного типа животного
+        this.add(choiceAllAlivePredatorsKill);
+        choiceAllAlivePredatorsKill.setVisible(false); // Если выбран чекбокс "Травоядное" - true, иначе - false
+
+        choiceAllAliveHerbivoresKill = new Choice();
+        choiceAllAliveHerbivoresKill.setBounds(494, 240, 166, 24); // Видимость зависит от выбранного типа животного
+        this.add(choiceAllAliveHerbivoresKill);
+        choiceAllAliveHerbivoresKill.setVisible(false); // Если выбран чекбокс "Хищника" - true, иначе - false
 
         canvasKill = new Canvas();
         canvasKill.setBounds(420, 121, 320, 272);
@@ -479,8 +516,32 @@ public class ClientForm extends Frame {
         return choiceAllFood;
     }
 
-    public Choice getChoiceAllAliveAnimals() {
-        return choiceAllAliveAnimals;
+    public Choice getChoiceAllAlivePredatorsKill() {
+        return choiceAllAlivePredatorsKill;
+    }
+
+    public Choice getChoiceAllAliveHerbivoresKill(){
+        return choiceAllAliveHerbivoresKill;
+    }
+
+    public CheckboxGroup getCbgKill(){
+        return cbgKill;
+    }
+
+    public Checkbox getCbHerbivoresKill() {
+        return cbHerbivoresKill;
+    }
+
+    public void setCbHerbivoresKill(Checkbox cbHerbivoresKill) {
+        this.cbHerbivoresKill = cbHerbivoresKill;
+    }
+
+    public Checkbox getCbPredatorsKill() {
+        return cbPredatorsKill;
+    }
+
+    public void setCbPredatorsKill(Checkbox cbPredatorsKill) {
+        this.cbPredatorsKill = cbPredatorsKill;
     }
 
     public Checkbox getCbHerbivores() {
