@@ -1,11 +1,7 @@
 package controller;
 
-import controller.Listener.ClientListener;
-import resources.Resources;
-import storage.DataManager;
-import view.ClientForm;
 
-import java.awt.*;
+import view.ClientForm;
 
 public class GeneralController {
     public static boolean isStarted;
@@ -21,7 +17,6 @@ public class GeneralController {
     public static ClientForm clientForm;
 
     public static void startApp(boolean isForm){
-        DataManager.initialise(Resources.initialise);
         if(isForm) {
              clientForm = new ClientForm();
         }
@@ -82,6 +77,6 @@ public class GeneralController {
     }
 
     public static void save(){
-        DataManager.save();
+
     }
 }

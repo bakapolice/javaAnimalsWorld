@@ -102,6 +102,18 @@ public class ClientListener implements ActionListener, ItemListener {
             }
         }
 
+        // Обработка события "Отключиться"
+        if (e.getSource() == clientForm.getButtonStop()) {
+            message = log + "Нажата кнопка " + clientForm.getButtonStop().getActionCommand();
+            clientForm.getTextAreaLogs().append(message + '\n');
+            try {
+                NetController.disconnectClient();
+                clientForm.disableComponents();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
 //        System.out.println(e.getSource());
 //        System.out.println(e.getActionCommand());
     }

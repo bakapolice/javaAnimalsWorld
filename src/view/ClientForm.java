@@ -24,6 +24,7 @@ public class ClientForm extends Frame {
     private JButton buttonKill;
     private JButton buttonPrint;
     private JButton buttonStart;
+    private JButton buttonStop;
 
     private Choice choiceLanguage;
     private Choice listWhatToCreate;
@@ -101,8 +102,10 @@ public class ClientForm extends Frame {
                 component.setEnabled(false);
             }
         }
+        buttonStart.setEnabled(true);
         buttonStart.setToolTipText("Нажмите для подключения к серверу!");
         String messageDisabled = "Кнопка неактивна. Необходимо подключение к серверу";
+        buttonStop.setToolTipText(messageDisabled);
         buttonCreate.setToolTipText(messageDisabled);
         buttonKill.setToolTipText(messageDisabled);
         buttonFeed.setToolTipText(messageDisabled);
@@ -115,6 +118,7 @@ public class ClientForm extends Frame {
         choiceLanguage.setEnabled(false);
         buttonStart.setEnabled(false);
         buttonStart.setToolTipText("Кнопка неактивна. Вы уже подключены к серверу!");
+        buttonStop.setToolTipText("Нажмите, чтобы отключиться от сервера!");
         buttonCreate.setToolTipText(null);
         buttonKill.setToolTipText(null);
         buttonFeed.setToolTipText(null);
@@ -127,6 +131,7 @@ public class ClientForm extends Frame {
         labelHost.setText(Resources.rb.getString("LABEL_HOST"));
         labelPort.setText(Resources.rb.getString("LABEL_PORT"));
         buttonStart.setText(Resources.rb.getString("BUTTON_START"));
+        buttonStop.setText(Resources.rb.getString("BUTTON_STOP"));
 
         buttonCreate.setText(Resources.rb.getString("BUTTON_CREATE"));
         labelCreate.setText(Resources.rb.getString("LABEL_CREATE").toUpperCase());
@@ -202,10 +207,16 @@ public class ClientForm extends Frame {
         this.add(textFieldPort);
 
         buttonStart = new JButton();
-        buttonStart.setBounds(1136, 15 + 25, 170, 35);
+        buttonStart.setBounds(961, 15 + 25, 170, 35);
         buttonStart.setBackground(new Color(51, 53, 59));
         buttonStart.setForeground(Color.white);
         this.add(buttonStart);
+
+        buttonStop = new JButton();
+        buttonStop.setBounds(1136, 15 + 25, 170, 35);
+        buttonStop.setBackground(new Color(51, 53, 59));
+        buttonStop.setForeground(Color.white);
+        this.add(buttonStop);
 
         canvasSettings = new Canvas();
         canvasSettings.setBounds(0, 0, 1366, 80);
@@ -516,16 +527,8 @@ public class ClientForm extends Frame {
         return cbHerbivoresKill;
     }
 
-    public void setCbHerbivoresKill(Checkbox cbHerbivoresKill) {
-        this.cbHerbivoresKill = cbHerbivoresKill;
-    }
-
     public Checkbox getCbPredatorsKill() {
         return cbPredatorsKill;
-    }
-
-    public void setCbPredatorsKill(Checkbox cbPredatorsKill) {
-        this.cbPredatorsKill = cbPredatorsKill;
     }
 
     public Checkbox getCbHerbivores() {
@@ -602,5 +605,9 @@ public class ClientForm extends Frame {
 
     public CheckboxGroup getCbgFeed() {
         return cbgFeed;
+    }
+
+    public JButton getButtonStop() {
+        return buttonStop;
     }
 }

@@ -1,11 +1,7 @@
 package controller.Listener;
 
 import controller.GeneralController;
-import model.Grass;
-import model.Herbivore;
-import model.Predator;
 import resources.Resources;
-import storage.Storage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
