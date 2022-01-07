@@ -15,6 +15,10 @@ public class ClientListener implements ActionListener, ItemListener {
     final String log = "[LOG] ";
     final String error = "[ERROR] ";
 
+    public ClientForm getClientForm(){
+        return clientForm;
+    }
+
     public ClientListener(ClientForm clientForm) {
         this.clientForm = clientForm;
         for (Component component : clientForm.getComponents()) {
@@ -28,6 +32,7 @@ public class ClientListener implements ActionListener, ItemListener {
                 ((Choice) component).addItemListener(this);
             }
         }
+
         this.clientForm.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -48,7 +53,11 @@ public class ClientListener implements ActionListener, ItemListener {
         if (e.getSource() == clientForm.getButtonCreate()) {
             message = log + "Нажата кнопка " + clientForm.getButtonCreate().getActionCommand();
             clientForm.getTextAreaLogs().append(message + '\n');
-            createPerform();
+            try {
+                createPerform();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
         }
 
 
@@ -56,14 +65,22 @@ public class ClientListener implements ActionListener, ItemListener {
         if (e.getSource() == clientForm.getButtonKill()) {
             message = log + "Нажата кнопка " + clientForm.getButtonKill().getActionCommand();
             clientForm.getTextAreaLogs().append(message + '\n');
-            killPerform();
+            try {
+                killPerform();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
         }
 
         // Обработка события "Покормить"
         if (e.getSource() == clientForm.getButtonFeed()) {
             message = log + "Нажата кнопка " + clientForm.getButtonFeed().getActionCommand();
             clientForm.getTextAreaLogs().append(message + '\n');
-            feedPerform();
+            try {
+                feedPerform();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
         }
 
         // Обработка события "Вывести на экран"
@@ -79,6 +96,7 @@ public class ClientListener implements ActionListener, ItemListener {
             clientForm.getTextAreaLogs().append(message + '\n');
             try {
                 startPerform();
+                loadData();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -86,6 +104,22 @@ public class ClientListener implements ActionListener, ItemListener {
 
 //        System.out.println(e.getSource());
 //        System.out.println(e.getActionCommand());
+    }
+
+    private void loadData() throws InterruptedException {
+        clientForm.getChoiceAllAliveHerbivoresKill().removeAll();
+        clientForm.getChoiceAllAlivePredatorsKill().removeAll();
+        clientForm.getChoiceAllAliveHerbivores().removeAll();
+        clientForm.getListAllAliveHerbivoresToFeed().removeAll();
+        clientForm.getListAllAlivePredators().removeAll();
+        clientForm.getChoiceAllFood().removeAll();
+
+        GeneralController.loadData(GeneralController.ALL_ALIVE_HERBIVORES);
+        Thread.sleep(1000);
+        GeneralController.loadData(GeneralController.ALL_ALIVE_PREDATORS);
+        Thread.sleep(1000);
+        GeneralController.loadData(GeneralController.ALL_FOOD);
+        Thread.sleep(1000);
     }
 
     @Override
@@ -133,7 +167,7 @@ public class ClientListener implements ActionListener, ItemListener {
 //        System.out.println(e.getItem());
     }
 
-    private void createPerform() {
+    private void createPerform() throws InterruptedException {
         String message;
         String selected = clientForm.getListWhatToCreate().getSelectedItem();
         String name = clientForm.getTextFieldName().getText();
@@ -168,7 +202,8 @@ public class ClientListener implements ActionListener, ItemListener {
             clientForm.getTextAreaErrors().append(error + "Значение поля 'Вес' введено некорректно\n");
             return;
         }
-        clientForm.loadData();
+        Thread.sleep(1000);
+        loadData();
         message = log +
                 "Создать: " + selected + "; " +
                 "Имя: " + name + "; " +
@@ -177,7 +212,7 @@ public class ClientListener implements ActionListener, ItemListener {
     }
 
 
-    private void killPerform() {
+    private void killPerform() throws InterruptedException {
         String message;
         if (clientForm.getCbgKill().getSelectedCheckbox() == null) {
             JOptionPane.showMessageDialog(clientForm, "Выберите кого убить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
@@ -193,7 +228,8 @@ public class ClientListener implements ActionListener, ItemListener {
                 return;
             }
             GeneralController.killHerbivore(clientForm.getChoiceAllAliveHerbivoresKill().getSelectedIndex(), true);
-            clientForm.loadData();
+            Thread.sleep(1000);
+            loadData();
             message = log +
                     "Убить травоядное " + selectedHerbivore;
             clientForm.getTextAreaLogs().append(message + '\n');
@@ -207,14 +243,15 @@ public class ClientListener implements ActionListener, ItemListener {
                 return;
             }
             GeneralController.killPredator(clientForm.getChoiceAllAlivePredatorsKill().getSelectedIndex(), true);
-            clientForm.loadData();
+            Thread.sleep(1000);
+            loadData();
             message = log +
                     "Убить хищника " + selectedPredator;
             clientForm.getTextAreaLogs().append(message + '\n');
         }
     }
 
-    private void feedPerform() {
+    private void feedPerform() throws InterruptedException {
         String message;
         if (clientForm.getCbgFeed().getSelectedCheckbox() == null) {
             JOptionPane.showMessageDialog(clientForm, "Выберите кого покормить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
@@ -238,7 +275,8 @@ public class ClientListener implements ActionListener, ItemListener {
             int herbivoreID = clientForm.getListAllAliveHerbivoresToFeed().getSelectedIndex();
             int foodID = clientForm.getChoiceAllFood().getSelectedIndex();
             GeneralController.feedHerbivore(herbivoreID, foodID, true);
-            clientForm.loadData();
+            Thread.sleep(1000);
+            loadData();
             message = log +
                     "Покормить травоядное " + selectedHerbivore +
                     "; Еда: " + selectedFood;
@@ -261,7 +299,8 @@ public class ClientListener implements ActionListener, ItemListener {
             int predatorID = clientForm.getListAllAlivePredators().getSelectedIndex();
             int herbivoreID = clientForm.getChoiceAllAliveHerbivores().getSelectedIndex();
             GeneralController.feedPredator(predatorID, herbivoreID, true);
-            clientForm.loadData();
+            Thread.sleep(1000);
+            loadData();
             message = log +
                     "Покормить хищника " + selectedPredator +
                     "; Еда: " + selectedFood;
@@ -276,33 +315,33 @@ public class ClientListener implements ActionListener, ItemListener {
             return;
         }
         TextArea textArea = clientForm.getTextAreaPrint();
-
+        textArea.setText(null);
         if (clientForm.getCbAllAnimals().getState()) {
-            textArea.setText(GeneralController.print(GeneralController.ALL_ANIMALS));
+            GeneralController.print(GeneralController.ALL_ANIMALS);
             textArea.append("Вывод на экран списка всех животных\n");
         }
         if (clientForm.getCbAllAliveAnimals().getState()) {
-            textArea.setText(GeneralController.print(GeneralController.ALL_ALIVE_ANIMALS));
+            GeneralController.print(GeneralController.ALL_ALIVE_ANIMALS);
             clientForm.getTextAreaPrint().append("Вывод на экран списка всех живых животных\n");
         }
         if (clientForm.getCbAllHerbivores().getState()) {
-            textArea.setText(GeneralController.print(GeneralController.ALL_HERBIVORES));
+            GeneralController.print(GeneralController.ALL_HERBIVORES);
             clientForm.getTextAreaPrint().append("Вывод на экран списка всех травоядных\n");
         }
         if (clientForm.getCbAllPredators().getState()) {
-            textArea.setText(GeneralController.print(GeneralController.ALL_PREDATORS));
+            GeneralController.print(GeneralController.ALL_PREDATORS);
             clientForm.getTextAreaPrint().append("Вывод на экран списка всех хищников\n");
         }
         if (clientForm.getCbAllAliveHerbivores().getState()) {
-            textArea.setText(GeneralController.print(GeneralController.ALL_ALIVE_HERBIVORES));
+            GeneralController.print(GeneralController.ALL_ALIVE_HERBIVORES);
             clientForm.getTextAreaPrint().append("Вывод на экран списка всех живых травоядных\n");
         }
         if (clientForm.getCbAllAlivePredators().getState()) {
-            textArea.setText(GeneralController.print(GeneralController.ALL_ALIVE_PREDATORS));
+            GeneralController.print(GeneralController.ALL_ALIVE_PREDATORS);
             clientForm.getTextAreaPrint().append("Вывод на экран списка всех живых хищников\n");
         }
         if (clientForm.getCbAllFood().getState()) {
-            textArea.setText(GeneralController.print(GeneralController.ALL_FOOD));
+            GeneralController.print(GeneralController.ALL_FOOD);
             clientForm.getTextAreaPrint().append("Вывод на экран списка всей еды\n");
         }
     }

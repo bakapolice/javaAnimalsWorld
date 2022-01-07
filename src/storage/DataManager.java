@@ -74,7 +74,6 @@ public class DataManager {
         //Обновить данные
         storage.update(herbivore);
         storage.update(grass);
-
     }
 
     public static void feedPredator(int selection, int foodID, boolean form) {

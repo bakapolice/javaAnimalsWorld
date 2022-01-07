@@ -1,5 +1,6 @@
 package controller;
 
+import controller.Listener.ClientListener;
 import resources.Resources;
 import storage.DataManager;
 import view.ClientForm;
@@ -17,10 +18,12 @@ public class GeneralController {
     public final static int ALL_ALIVE_PREDATORS = 6;
     public final static int ALL_FOOD = 7;
 
+    public static ClientForm clientForm;
+
     public static void startApp(boolean isForm){
         DataManager.initialise(Resources.initialise);
         if(isForm) {
-            ClientForm clientForm = new ClientForm();
+             clientForm = new ClientForm();
         }
         NetController.startApp();
     }
@@ -46,36 +49,36 @@ public class GeneralController {
     //Убить ---------------------------------------------------------
     public static void killHerbivore(int selection, boolean form){
         NetController.sendRequestToServer(NetController.REQUEST_TYPE_KILL, "Herbivore", selection, form);
-        DataManager.killHerbivore(selection,form);
+        //DataManager.killHerbivore(selection,form);
     }
 
     public static void killPredator(int selection, boolean form){
         NetController.sendRequestToServer(NetController.REQUEST_TYPE_KILL, "Predator", selection, form);
-        DataManager.killPredator(selection, form);
+        //DataManager.killPredator(selection, form);
     }
     //---------------------------------------------------------------
 
     //Покормить -----------------------------------------------------
     public static void feedHerbivore(int selection, int foodID, boolean form){
         NetController.sendRequestToServer(NetController.REQUEST_TYPE_FEED, "Herbivore", selection, foodID, form);
-        DataManager.feedHerbivore(selection, foodID, form);
+        //DataManager.feedHerbivore(selection, foodID, form);
     }
 
     public static void feedPredator(int selection, int foodID, boolean form){
         NetController.sendRequestToServer(NetController.REQUEST_TYPE_FEED, "Predator", selection, foodID, form);
-        DataManager.feedPredator(selection, foodID, form);
+        //DataManager.feedPredator(selection, foodID, form);
     }
     //---------------------------------------------------------------
 
     //Вывести -------------------------------------------------------
-    public static String print(int selection){
-
-        return DataManager.print(selection);
+    public static void print(int selection){
+        NetController.sendRequestToServer(NetController.REQUEST_TYPE_PRINT, selection);
+        //return DataManager.print(selection);
     }
     //---------------------------------------------------------------
 
-    public static String[] loadData(int selection){
-        return DataManager.loadData(selection);
+    public static void loadData(int selection){
+        NetController.sendRequestToServer(NetController.REQUEST_TYPE_LOAD, selection);
     }
 
     public static void save(){

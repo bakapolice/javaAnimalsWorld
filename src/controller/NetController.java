@@ -1,6 +1,7 @@
 package controller;
 
 import Client.Client;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 
@@ -16,13 +17,13 @@ public class NetController {
     private static JSONObject jsonRequest;
     private static JSONObject jsonResponse;
 
+
     public static Client client;
 
-    public static void startApp(){
+    public static void startApp() {
         try {
             client = new Client();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -30,32 +31,29 @@ public class NetController {
     public static void connectClient(String host, int port) throws Exception {
         try {
             client.connect(host, port);
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             throw new Exception("Невозможно подключиться к указанному серверу!");
         }
     }
 
-    public static boolean disconnectClient(){
+    public static boolean disconnectClient() {
         try {
-            if(client.isConnected())
-            client.disconnect();
+            if (client.isConnected())
+                client.disconnect();
             return true;
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             return false;
         }
     }
 
-    public static boolean exitClient(){
-        try{
-            if(client.isConnected())
+    public static boolean exitClient() {
+        try {
+            if (client.isConnected())
                 client.disconnect();
             return true;
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             return false;
         }
@@ -87,7 +85,7 @@ public class NetController {
         jsonResponse.toString();
     }
 
-    public static void sendRequestToServer(int command){
+    public static void sendRequestToServer(int command) {
         createJsonRequest(command, null, null, null, null, null, null);
         client.setNewCommand(true);
     }
@@ -112,11 +110,11 @@ public class NetController {
         client.setNewCommand(true);
     }
 
-    public static void getResponseFromServer(JSONObject jsonResponse){
+    public static void getResponseFromServer(JSONObject jsonResponse) {
         System.out.println(jsonResponse.toString());
-        switch (jsonRequest.getInt("request_type")){
+        switch (jsonRequest.getInt("request_type")) {
             case REQUEST_TYPE_CONNECT -> {
-                if(client.isConnected()){
+                if (client.isConnected()) {
                     //Вывести на экран формы сообщение
                 }
             }
@@ -133,10 +131,35 @@ public class NetController {
                 //Перезагрузить данные
             }
             case REQUEST_TYPE_PRINT -> {
-                //Вывести на форму полученную информацию с сервера.
+                GeneralController.clientForm.getTextAreaPrint().setText(jsonResponse.getString("message"));
             }
             case REQUEST_TYPE_LOAD -> {
-
+                JSONObject data = jsonResponse.getJSONObject("data");
+                JSONArray keys = data.names();
+                switch (jsonResponse.getInt("selection_id")) {
+                    case GeneralController.ALL_ALIVE_HERBIVORES -> {
+                        for (int i = 0; i < keys.length(); i++) {
+                            String key = keys.getString(i);
+                            GeneralController.clientForm.getChoiceAllAliveHerbivoresKill().add(data.getString(key));
+                            GeneralController.clientForm.getChoiceAllAliveHerbivores().add(data.getString(key));
+                            GeneralController.clientForm.getListAllAliveHerbivoresToFeed().add(data.getString(key));
+                        }
+                    }
+                    case GeneralController.ALL_ALIVE_PREDATORS -> {
+                        for (int i = 0; i < keys.length(); i++) {
+                            String key = keys.getString(i);
+                            GeneralController.clientForm.getChoiceAllAlivePredatorsKill().add(data.getString(key));
+                            GeneralController.clientForm.getListAllAlivePredators().add(data.getString(key));
+                        }
+                    }
+                    case GeneralController.ALL_FOOD -> {
+                        for (int i = 0; i < keys.length(); i++) {
+                            String key = keys.getString(i);
+                            GeneralController.clientForm.getChoiceAllFood().add(data.getString(key));
+                        }
+                    }
+                }
+                //Сделать еще поле в JSON, чтобы определять в какой элемент добавлять данные
             }
         }
     }
