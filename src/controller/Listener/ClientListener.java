@@ -53,11 +53,7 @@ public class ClientListener implements ActionListener, ItemListener {
         if (e.getSource() == clientForm.getButtonCreate()) {
             message = log + "Нажата кнопка " + clientForm.getButtonCreate().getActionCommand();
             clientForm.getTextAreaLogs().append(message + '\n');
-            try {
-                createPerform();
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
+            createPerform();
         }
 
 
@@ -118,7 +114,7 @@ public class ClientListener implements ActionListener, ItemListener {
 //        System.out.println(e.getActionCommand());
     }
 
-    private void loadData() throws InterruptedException {
+    private void loadData(){
         clientForm.getChoiceAllAliveHerbivoresKill().removeAll();
         clientForm.getChoiceAllAlivePredatorsKill().removeAll();
         clientForm.getChoiceAllAliveHerbivores().removeAll();
@@ -127,11 +123,8 @@ public class ClientListener implements ActionListener, ItemListener {
         clientForm.getChoiceAllFood().removeAll();
 
         GeneralController.loadData(GeneralController.ALL_ALIVE_HERBIVORES);
-        Thread.sleep(1000);
         GeneralController.loadData(GeneralController.ALL_ALIVE_PREDATORS);
-        Thread.sleep(1000);
         GeneralController.loadData(GeneralController.ALL_FOOD);
-        Thread.sleep(1000);
     }
 
     @Override
@@ -179,7 +172,7 @@ public class ClientListener implements ActionListener, ItemListener {
 //        System.out.println(e.getItem());
     }
 
-    private void createPerform() throws InterruptedException {
+    private void createPerform(){
         String message;
         String selected = clientForm.getListWhatToCreate().getSelectedItem();
         String name = clientForm.getTextFieldName().getText();
@@ -214,7 +207,6 @@ public class ClientListener implements ActionListener, ItemListener {
             clientForm.getTextAreaErrors().append(error + "Значение поля 'Вес' введено некорректно\n");
             return;
         }
-        Thread.sleep(1000);
         loadData();
         message = log +
                 "Создать: " + selected + "; " +
@@ -240,7 +232,6 @@ public class ClientListener implements ActionListener, ItemListener {
                 return;
             }
             GeneralController.killHerbivore(clientForm.getChoiceAllAliveHerbivoresKill().getSelectedIndex(), true);
-            Thread.sleep(1000);
             loadData();
             message = log +
                     "Убить травоядное " + selectedHerbivore;
@@ -255,7 +246,6 @@ public class ClientListener implements ActionListener, ItemListener {
                 return;
             }
             GeneralController.killPredator(clientForm.getChoiceAllAlivePredatorsKill().getSelectedIndex(), true);
-            Thread.sleep(1000);
             loadData();
             message = log +
                     "Убить хищника " + selectedPredator;
@@ -287,7 +277,6 @@ public class ClientListener implements ActionListener, ItemListener {
             int herbivoreID = clientForm.getListAllAliveHerbivoresToFeed().getSelectedIndex();
             int foodID = clientForm.getChoiceAllFood().getSelectedIndex();
             GeneralController.feedHerbivore(herbivoreID, foodID, true);
-            Thread.sleep(1000);
             loadData();
             message = log +
                     "Покормить травоядное " + selectedHerbivore +
@@ -311,7 +300,6 @@ public class ClientListener implements ActionListener, ItemListener {
             int predatorID = clientForm.getListAllAlivePredators().getSelectedIndex();
             int herbivoreID = clientForm.getChoiceAllAliveHerbivores().getSelectedIndex();
             GeneralController.feedPredator(predatorID, herbivoreID, true);
-            Thread.sleep(1000);
             loadData();
             message = log +
                     "Покормить хищника " + selectedPredator +

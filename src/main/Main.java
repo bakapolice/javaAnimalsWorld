@@ -3,16 +3,13 @@ package main;
 import controller.GeneralController;
 import controller.Listener.DialogListener;
 import resources.Resources;
-import view.ClientForm;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
 
     private static final Scanner scanner = new Scanner(System.in);
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         int selection = 0;
         if(!Resources.startApp()){
             System.out.println(Resources.rb.getString("MESSAGE_SETUP_ERROR"));
@@ -45,12 +42,17 @@ public class Main {
             catch (InputMismatchException ex){
                 scanner.nextLine();
                 System.err.println("Невалидные данные!");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
 
-    private static void showDialog() throws IOException {
+    private static void showDialog() throws Exception {
         int selection = 0;
+        System.out.println("Введите порт для подключения к серверу: ");
+        selection = scanner.nextInt();
+        DialogListener.connectClient(selection);
         while (true) {
             System.out.println(
                     "1. " + Resources.rb.getString("MESSAGE_MAIN_MENU_ITEM_CREATE") + '\n' +

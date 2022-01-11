@@ -2,10 +2,8 @@ package Client;
 
 import controller.NetController;
 import org.json.JSONObject;
-
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 
 public class Client implements Runnable {
     private Socket socket = null;
@@ -13,6 +11,7 @@ public class Client implements Runnable {
     private boolean newCommand;
     private ObjectOutputStream objectOutputStream;
     private ObjectInputStream objectInputStream;
+    private String serverRequest;
 
     public void connect(String host, int port) throws IOException {
         socket = new Socket(host, port);
@@ -24,6 +23,7 @@ public class Client implements Runnable {
     public void disconnect() throws IOException {
         socket.close();
         isConnected = false;
+        newCommand = true;
     }
 
     @Override
@@ -32,11 +32,9 @@ public class Client implements Runnable {
             NetController.sendRequestToServer(NetController.REQUEST_TYPE_CONNECT);
             while (isConnected) {
                 while (!newCommand) Thread.sleep(100);
-                String serverRequest = NetController.getJsonRequest().toString();
+                serverRequest = NetController.getJsonRequest().toString();
                 objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-                System.out.println("Новая команда");
                 while (newCommand) {
-                    JSONObject tmp = new JSONObject(serverRequest);
                     objectOutputStream.writeObject(serverRequest);
 
                     objectInputStream = new ObjectInputStream(socket.getInputStream());

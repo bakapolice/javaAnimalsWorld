@@ -115,24 +115,11 @@ public class NetController {
         switch (jsonRequest.getInt("request_type")) {
             case REQUEST_TYPE_CONNECT -> {
                 if (client.isConnected()) {
-                    //Вывести на экран формы сообщение
+                    GeneralController.clientForm.getTextAreaLogs().append(jsonResponse.getString("message"));
                 }
             }
-            case REQUEST_TYPE_CREATE -> {
-                //Вывести на форму полученную информацию с сервера.
-                //Перезагрузить данные на форме
-            }
-            case REQUEST_TYPE_KILL -> {
-                //Вывести на форму полученную информацию с сервера.
-                //Перезагрузить данные формы
-            }
-            case REQUEST_TYPE_FEED -> {
-                //Вывести на форму полученную информацию с сервера.
-                //Перезагрузить данные
-            }
-            case REQUEST_TYPE_PRINT -> {
-                GeneralController.clientForm.getTextAreaPrint().setText(jsonResponse.getString("message"));
-            }
+            case REQUEST_TYPE_CREATE, REQUEST_TYPE_KILL, REQUEST_TYPE_FEED -> GeneralController.clientForm.getTextAreaLogs().append(jsonResponse.getString("message"));
+            case REQUEST_TYPE_PRINT -> GeneralController.clientForm.getTextAreaPrint().setText(jsonResponse.getString("message"));
             case REQUEST_TYPE_LOAD -> {
                 JSONObject data = jsonResponse.getJSONObject("data");
                 JSONArray keys = data.names();
@@ -159,7 +146,6 @@ public class NetController {
                         }
                     }
                 }
-                //Сделать еще поле в JSON, чтобы определять в какой элемент добавлять данные
             }
         }
     }

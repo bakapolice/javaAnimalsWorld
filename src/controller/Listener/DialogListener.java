@@ -1,6 +1,7 @@
 package controller.Listener;
 
 import controller.GeneralController;
+import controller.NetController;
 import resources.Resources;
 
 import java.io.BufferedReader;
@@ -37,6 +38,7 @@ public class DialogListener {
     }
 
     public static void print(int selection){
+
         //System.out.println(GeneralController.print(selection));
     }
 
@@ -89,5 +91,9 @@ public class DialogListener {
         System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHAT_TO_FEED"));
         int foodID = scanner.nextInt();
         GeneralController.feedPredator(selection, foodID, false);
+    }
+
+    public static void connectClient(int port) throws Exception {
+        NetController.connectClient("localhost", port);
     }
 }
