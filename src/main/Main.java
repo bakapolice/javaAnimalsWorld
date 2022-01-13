@@ -1,5 +1,6 @@
 package main;
 
+import Client.Client;
 import controller.GeneralController;
 import controller.Listener.DialogListener;
 import resources.Resources;
@@ -53,6 +54,10 @@ public class Main {
         System.out.println("Введите порт для подключения к серверу: ");
         selection = scanner.nextInt();
         DialogListener.connectClient(selection);
+        if(!Client.isConnected()){
+            System.err.println("Не удалось подключиться к серверу!");
+            return;
+        }
         while (true) {
             System.out.println(
                     "1. " + Resources.rb.getString("MESSAGE_MAIN_MENU_ITEM_CREATE") + '\n' +

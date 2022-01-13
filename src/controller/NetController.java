@@ -13,9 +13,10 @@ public class NetController {
     public static final int REQUEST_TYPE_FEED = 3;
     public static final int REQUEST_TYPE_PRINT = 4;
     public static final int REQUEST_TYPE_LOAD = 5;
+    public static final int REQUEST_TYPE_SAVE = 6;
 
     private static JSONObject jsonRequest;
-    private static JSONObject jsonResponse;
+    private static JSONObject jsonResponse = new JSONObject();
 
 
     public static Client client;
@@ -112,37 +113,41 @@ public class NetController {
 
     public static void getResponseFromServer(JSONObject jsonResponse) {
         System.out.println(jsonResponse.toString());
-        switch (jsonRequest.getInt("request_type")) {
-            case REQUEST_TYPE_CONNECT -> {
-                if (client.isConnected()) {
-                    GeneralController.clientForm.getTextAreaLogs().append(jsonResponse.getString("message"));
+        setJsonResponse(jsonResponse);
+        if(GeneralController.clientForm!=null)
+        {
+            switch (jsonRequest.getInt("request_type")) {
+                case REQUEST_TYPE_CONNECT -> {
+                    if (client.isConnected()) {
+                        GeneralController.clientForm.getTextAreaLogs().append(jsonResponse.getString("message"));
+                    }
                 }
-            }
-            case REQUEST_TYPE_CREATE, REQUEST_TYPE_KILL, REQUEST_TYPE_FEED -> GeneralController.clientForm.getTextAreaLogs().append(jsonResponse.getString("message"));
-            case REQUEST_TYPE_PRINT -> GeneralController.clientForm.getTextAreaPrint().setText(jsonResponse.getString("message"));
-            case REQUEST_TYPE_LOAD -> {
-                JSONObject data = jsonResponse.getJSONObject("data");
-                JSONArray keys = data.names();
-                switch (jsonResponse.getInt("selection_id")) {
-                    case GeneralController.ALL_ALIVE_HERBIVORES -> {
-                        for (int i = 0; i < keys.length(); i++) {
-                            String key = keys.getString(i);
-                            GeneralController.clientForm.getChoiceAllAliveHerbivoresKill().add(data.getString(key));
-                            GeneralController.clientForm.getChoiceAllAliveHerbivores().add(data.getString(key));
-                            GeneralController.clientForm.getListAllAliveHerbivoresToFeed().add(data.getString(key));
+                case REQUEST_TYPE_CREATE, REQUEST_TYPE_KILL, REQUEST_TYPE_FEED, REQUEST_TYPE_SAVE -> GeneralController.clientForm.getTextAreaLogs().append(jsonResponse.getString("message"));
+                case REQUEST_TYPE_PRINT -> GeneralController.clientForm.getTextAreaPrint().setText(jsonResponse.getString("message"));
+                case REQUEST_TYPE_LOAD -> {
+                    JSONObject data = jsonResponse.getJSONObject("data");
+                    JSONArray keys = data.names();
+                    switch (jsonResponse.getInt("selection_id")) {
+                        case GeneralController.ALL_ALIVE_HERBIVORES -> {
+                            for (int i = 0; i < keys.length(); i++) {
+                                String key = keys.getString(i);
+                                GeneralController.clientForm.getChoiceAllAliveHerbivoresKill().add(data.getString(key));
+                                GeneralController.clientForm.getChoiceAllAliveHerbivores().add(data.getString(key));
+                                GeneralController.clientForm.getListAllAliveHerbivoresToFeed().add(data.getString(key));
+                            }
                         }
-                    }
-                    case GeneralController.ALL_ALIVE_PREDATORS -> {
-                        for (int i = 0; i < keys.length(); i++) {
-                            String key = keys.getString(i);
-                            GeneralController.clientForm.getChoiceAllAlivePredatorsKill().add(data.getString(key));
-                            GeneralController.clientForm.getListAllAlivePredators().add(data.getString(key));
+                        case GeneralController.ALL_ALIVE_PREDATORS -> {
+                            for (int i = 0; i < keys.length(); i++) {
+                                String key = keys.getString(i);
+                                GeneralController.clientForm.getChoiceAllAlivePredatorsKill().add(data.getString(key));
+                                GeneralController.clientForm.getListAllAlivePredators().add(data.getString(key));
+                            }
                         }
-                    }
-                    case GeneralController.ALL_FOOD -> {
-                        for (int i = 0; i < keys.length(); i++) {
-                            String key = keys.getString(i);
-                            GeneralController.clientForm.getChoiceAllFood().add(data.getString(key));
+                        case GeneralController.ALL_FOOD -> {
+                            for (int i = 0; i < keys.length(); i++) {
+                                String key = keys.getString(i);
+                                GeneralController.clientForm.getChoiceAllFood().add(data.getString(key));
+                            }
                         }
                     }
                 }

@@ -32,6 +32,8 @@ public class ClientForm extends Frame {
     private Choice listAllAliveHerbivoresToFeed; // Список живых травоядных для выбора "кого кормить"
     private Choice choiceAllAliveHerbivores; // Список живых травоядных для выбора "чем кормить"
     private Choice choiceAllFood; // Список еды для выбора "чем кормить"
+    private Choice choiceAllAlivePredatorsKill; // Какого хищника убить
+    private Choice choiceAllAliveHerbivoresKill; // Какого травоядного убить
 
 
     private TextField textFieldName;
@@ -77,8 +79,6 @@ public class ClientForm extends Frame {
     private CheckboxGroup cbgKill;
     private Checkbox cbHerbivoresKill;
     private Checkbox cbPredatorsKill;
-    private Choice choiceAllAlivePredatorsKill;
-    private Choice choiceAllAliveHerbivoresKill;
 
 
     private ClientListener clientListener;
@@ -92,6 +92,39 @@ public class ClientForm extends Frame {
         setText();
     }
 
+
+    public void clear(){
+        listAllAlivePredators.removeAll();
+        listAllAlivePredators.setVisible(false);
+
+        listAllAliveHerbivoresToFeed.removeAll();
+        listAllAliveHerbivoresToFeed.setVisible(false);
+
+        choiceAllAliveHerbivores.removeAll();
+        choiceAllAliveHerbivores.setVisible(false);
+
+        choiceAllFood.removeAll();
+        choiceAllFood.setVisible(false);
+
+        choiceAllAlivePredatorsKill.removeAll();
+        choiceAllAlivePredatorsKill.setVisible(false);
+
+        choiceAllAliveHerbivoresKill.removeAll();
+        choiceAllAliveHerbivoresKill.setVisible(false);
+
+        cbgPrint.setSelectedCheckbox(null);
+        cbgFeed.setSelectedCheckbox(null);
+        cbgKill.setSelectedCheckbox(null);
+
+        textAreaLogs.setText(null);
+        textAreaErrors.setText(null);
+        textAreaPrint.setText(null);
+
+        textFieldName.setText(null);
+        textFieldWeight.setText(null);
+    }
+
+
     public void disableComponents() {
         for (Component component : this.getComponents()) {
             if (component != buttonStart && component != labelLanguage
@@ -103,6 +136,7 @@ public class ClientForm extends Frame {
             }
         }
         buttonStart.setEnabled(true);
+        choiceLanguage.setEnabled(true);
         buttonStart.setToolTipText("Нажмите для подключения к серверу!");
         String messageDisabled = "Кнопка неактивна. Необходимо подключение к серверу";
         buttonStop.setToolTipText(messageDisabled);
@@ -110,6 +144,7 @@ public class ClientForm extends Frame {
         buttonKill.setToolTipText(messageDisabled);
         buttonFeed.setToolTipText(messageDisabled);
         buttonPrint.setToolTipText(messageDisabled);
+        clear();
     }
 
     public void enableComponents() {
@@ -349,9 +384,6 @@ public class ClientForm extends Frame {
         labelWhoToKill.setBackground(custom);
         this.add(labelWhoToKill);
 
-
-
-        // Блок "Убить" -----------------------
         cbgKill = new CheckboxGroup();
         cbHerbivoresKill = new Checkbox("", cbgKill, false);
         cbHerbivoresKill.setBounds(494, 196, 150, 15);

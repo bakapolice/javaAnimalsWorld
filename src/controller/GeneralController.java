@@ -3,8 +3,9 @@ package controller;
 
 import view.ClientForm;
 
+import javax.swing.*;
+
 public class GeneralController {
-    public static boolean isStarted;
 
     public final static int ALL_ANIMALS = 1;
     public final static int ALL_ALIVE_ANIMALS = 2;
@@ -61,6 +62,11 @@ public class GeneralController {
     //Вывести -------------------------------------------------------
     public static void print(int selection) {
         NetController.sendRequestToServer(NetController.REQUEST_TYPE_PRINT, selection);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     //---------------------------------------------------------------
 
@@ -73,7 +79,17 @@ public class GeneralController {
         NetController.sendRequestToServer(NetController.REQUEST_TYPE_LOAD, selection);
     }
 
-    public static void save() {
+    public static void disableComponents(){
+        if(clientForm!= null)
+        clientForm.disableComponents();
+    }
 
+    public static void ConnectErrorMessage(){
+        if(clientForm != null)
+            JOptionPane.showMessageDialog(GeneralController.clientForm, "Сервер отключен или недоступен!", "Ошибка!", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public static void save() {
+        NetController.sendRequestToServer(NetController.REQUEST_TYPE_SAVE);
     }
 }

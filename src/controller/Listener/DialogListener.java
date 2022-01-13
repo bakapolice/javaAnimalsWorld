@@ -7,6 +7,7 @@ import resources.Resources;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.Socket;
 import java.util.Scanner;
 
 public class DialogListener {
@@ -21,7 +22,7 @@ public class DialogListener {
         GeneralController.createPredator(name, weigh);
     }
 
-    public static void createHerbivore() throws IOException {
+    public static void createHerbivore() throws IOException {;
         System.out.println(Resources.rb.getString("MESSAGE_ENTER_NAME_HERBIVORE"));
         String name = reader.readLine();
         System.out.println(Resources.rb.getString("MESSAGE_ENTER_WEIGHT_HERBIVORE"));
@@ -38,7 +39,8 @@ public class DialogListener {
     }
 
     public static void print(int selection){
-
+        GeneralController.print(selection);
+        System.out.println(NetController.getJsonResponse().getString("message"));
         //System.out.println(GeneralController.print(selection));
     }
 
@@ -48,6 +50,8 @@ public class DialogListener {
 
     public static void killHerbivore(){
         //Список всех живых травоядных
+        GeneralController.print(GeneralController.ALL_ALIVE_HERBIVORES);
+        System.out.println(NetController.getJsonResponse().getString("message"));
         //System.out.println(GeneralController.print(GeneralController.ALL_ALIVE_HERBIVORES));
         //Выбрать травоядное
         System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHO_TO_KILL"));
@@ -57,6 +61,8 @@ public class DialogListener {
 
     public static void killPredator(){
         //Список всех живых хищников
+        GeneralController.print(GeneralController.ALL_ALIVE_PREDATORS);
+        System.out.println(NetController.getJsonResponse().getString("message"));
         //System.out.println(GeneralController.print(GeneralController.ALL_ALIVE_PREDATORS));
         //Выбрать хищника
         System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHO_TO_KILL"));
@@ -66,12 +72,16 @@ public class DialogListener {
 
     public static void feedHerbivore(){
         //Список всех живых травоядных
+        GeneralController.print(GeneralController.ALL_ALIVE_HERBIVORES);
+        System.out.println(NetController.getJsonResponse().getString("message"));
         //System.out.println(GeneralController.print(GeneralController.ALL_ALIVE_HERBIVORES));
         //Выбрать травоядное
         System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHO_TO_FEED"));
         int selection = scanner.nextInt();
 
         //Выбрать чем кормить
+        GeneralController.print(GeneralController.ALL_FOOD);
+        System.out.println(NetController.getJsonResponse().getString("message"));
         //System.out.println(GeneralController.print(GeneralController.ALL_FOOD));
         System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHAT_TO_FEED"));
         int foodID = scanner.nextInt();
@@ -81,12 +91,16 @@ public class DialogListener {
 
     public static void feedPredator(){
         //Список всех живых хищников
+        GeneralController.print(GeneralController.ALL_ALIVE_PREDATORS);
+        System.out.println(NetController.getJsonResponse().getString("message"));
         //System.out.println(GeneralController.print(GeneralController.ALL_ALIVE_PREDATORS));
         //Выбрать хищника
         System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHO_TO_FEED"));
         int selection = scanner.nextInt();
 
         //Выбрать чем кормить
+        GeneralController.print(GeneralController.ALL_ALIVE_HERBIVORES);
+        System.out.println(NetController.getJsonResponse().getString("message"));
         //System.out.println(GeneralController.print(GeneralController.ALL_ALIVE_HERBIVORES));
         System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHAT_TO_FEED"));
         int foodID = scanner.nextInt();

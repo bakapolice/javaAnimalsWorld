@@ -114,6 +114,8 @@ public class ClientListener implements ActionListener, ItemListener {
 //        System.out.println(e.getActionCommand());
     }
 
+
+
     private void loadData(){
         clientForm.getChoiceAllAliveHerbivoresKill().removeAll();
         clientForm.getChoiceAllAlivePredatorsKill().removeAll();

@@ -1,17 +1,22 @@
 package Client;
 
+import controller.GeneralController;
 import controller.NetController;
 import org.json.JSONObject;
+
+import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class Client implements Runnable {
     private Socket socket = null;
-    private boolean isConnected;
+    private static boolean isConnected;
     private boolean newCommand;
     private ObjectOutputStream objectOutputStream;
     private ObjectInputStream objectInputStream;
     private String serverRequest;
+    private String serverResponse;
 
     public void connect(String host, int port) throws IOException {
         socket = new Socket(host, port);
@@ -23,7 +28,7 @@ public class Client implements Runnable {
     public void disconnect() throws IOException {
         socket.close();
         isConnected = false;
-        newCommand = true;
+        //newCommand = true;
     }
 
     @Override
@@ -31,21 +36,39 @@ public class Client implements Runnable {
         try {
             NetController.sendRequestToServer(NetController.REQUEST_TYPE_CONNECT);
             while (isConnected) {
-                while (!newCommand) Thread.sleep(100);
+                while (!newCommand)
+                {
+                    if(!isConnected)
+                    {
+                        System.err.println("Отключение");
+                        return;
+                    }
+                    Thread.sleep(100);
+                }
+
                 serverRequest = NetController.getJsonRequest().toString();
                 objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
                 while (newCommand) {
+
                     objectOutputStream.writeObject(serverRequest);
-
                     objectInputStream = new ObjectInputStream(socket.getInputStream());
-                    String serverResponse = objectInputStream.readObject().toString();
-
+                    serverResponse = objectInputStream.readObject().toString();
                     NetController.getResponseFromServer(new JSONObject(serverResponse));
                     newCommand = false;
                 }
             }
+        } catch (SocketException ex){
+            GeneralController.ConnectErrorMessage();
         } catch (IOException | ClassNotFoundException | InterruptedException e) {
             e.printStackTrace();
+        }
+        finally {
+            GeneralController.disableComponents();
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -58,7 +81,7 @@ public class Client implements Runnable {
         this.socket = socket;
     }
 
-    public boolean isConnected() {
+    public static boolean isConnected() {
         return isConnected;
     }
 
