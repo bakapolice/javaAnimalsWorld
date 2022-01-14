@@ -1,11 +1,13 @@
-package controller;
+package controller.Listener;
 
-import Client.Client;
+import client.Client;
+import controller.GeneralController;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import resources.Resources;
 
 
-public class NetController {
+public class NetListener {
 
     public static final int REQUEST_TYPE_CONNECT = 0;
     public static final int REQUEST_TYPE_CREATE = 1;
@@ -25,7 +27,7 @@ public class NetController {
         try {
             client = new Client();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
     }
 
@@ -33,19 +35,16 @@ public class NetController {
         try {
             client.connect(host, port);
         } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new Exception("Невозможно подключиться к указанному серверу!");
+            throw new Exception(Resources.rb.getString("MESSAGE_ERROR_CONNECTING"));
         }
     }
 
-    public static boolean disconnectClient() {
+    public static void disconnectClient() {
         try {
             if (client.isConnected())
                 client.disconnect();
-            return true;
         } catch (Exception ex) {
             ex.printStackTrace();
-            return false;
         }
     }
 
@@ -71,22 +70,7 @@ public class NetController {
         jsonRequest.put("is_form", isForm);
     }
 
-    private static void createJsonResponse(int command, String message) {
-        jsonResponse = new JSONObject();
-        jsonResponse.put("request_type", command);
-        jsonResponse.put("message", message);
-    }
-
-    private static void createJsonResponse(int command, int selection, String[] data) {
-        jsonResponse = new JSONObject();
-        for (String str : data) {
-            int counter = 0;
-            jsonResponse.put(String.valueOf(counter++), data);
-        }
-        jsonResponse.toString();
-    }
-
-    public static void sendRequestToServer(int command) {
+    public static void sendRequestToServer(int command) { //connect, save
         createJsonRequest(command, null, null, null, null, null, null);
         client.setNewCommand(true);
     }
@@ -160,7 +144,7 @@ public class NetController {
     }
 
     public static void setJsonRequest(JSONObject jsonRequest) {
-        NetController.jsonRequest = jsonRequest;
+        NetListener.jsonRequest = jsonRequest;
     }
 
     public static JSONObject getJsonResponse() {
@@ -168,6 +152,6 @@ public class NetController {
     }
 
     public static void setJsonResponse(JSONObject jsonResponse) {
-        NetController.jsonResponse = jsonResponse;
+        NetListener.jsonResponse = jsonResponse;
     }
 }

@@ -1,10 +1,10 @@
-package Client;
+package client;
 
 import controller.GeneralController;
-import controller.NetController;
+import controller.Listener.NetListener;
 import org.json.JSONObject;
+import resources.Resources;
 
-import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
@@ -19,56 +19,54 @@ public class Client implements Runnable {
     private String serverResponse;
 
     public void connect(String host, int port) throws IOException {
-        socket = new Socket(host, port);
-        isConnected = true;
-        Thread clientThread = new Thread(this);
-        clientThread.start();
+            socket = new Socket(host, port);
+            isConnected = true;
+            Thread clientThread = new Thread(this);
+            clientThread.start();
     }
 
-    public void disconnect() throws IOException {
-        socket.close();
-        isConnected = false;
-        //newCommand = true;
+    public void disconnect(){
+        try {
+            socket.close();
+            isConnected = false;
+        }
+        catch (IOException ex) {
+            System.err.println(Resources.rb.getString("MESSAGE_ERROR_SOCKET_CLOSING"));
+        }
     }
 
     @Override
     public void run() {
         try {
-            NetController.sendRequestToServer(NetController.REQUEST_TYPE_CONNECT);
+            NetListener.sendRequestToServer(NetListener.REQUEST_TYPE_CONNECT);
             while (isConnected) {
                 while (!newCommand)
                 {
                     if(!isConnected)
                     {
-                        System.err.println("Отключение");
+                        System.err.println(Resources.rb.getString("MESSAGE_DISCONNECTING"));
                         return;
                     }
                     Thread.sleep(100);
                 }
-
-                serverRequest = NetController.getJsonRequest().toString();
                 objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+                serverRequest = NetListener.getJsonRequest().toString();
                 while (newCommand) {
-
                     objectOutputStream.writeObject(serverRequest);
                     objectInputStream = new ObjectInputStream(socket.getInputStream());
                     serverResponse = objectInputStream.readObject().toString();
-                    NetController.getResponseFromServer(new JSONObject(serverResponse));
+                    NetListener.getResponseFromServer(new JSONObject(serverResponse));
                     newCommand = false;
                 }
             }
         } catch (SocketException ex){
             GeneralController.ConnectErrorMessage();
         } catch (IOException | ClassNotFoundException | InterruptedException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         finally {
             GeneralController.disableComponents();
-            try {
-                socket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            disconnect();
         }
     }
 

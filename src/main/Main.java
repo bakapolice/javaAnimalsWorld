@@ -1,32 +1,33 @@
 package main;
 
-import Client.Client;
+import client.Client;
 import controller.GeneralController;
 import controller.Listener.DialogListener;
 import resources.Resources;
+
 import java.io.IOException;
 import java.util.*;
 
 public class Main {
 
     private static final Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
-        int selection = 0;
-        if(!Resources.startApp()){
+        int selection;
+        if (!Resources.setup()) {
             System.out.println(Resources.rb.getString("MESSAGE_SETUP_ERROR"));
             return;
         }
 
-        while (true){
-            System.out.println("Выберите режим работы");
+        while (true) {
+            System.out.println(Resources.rb.getString("CHOSE_WORKING_MODE"));
             System.out.println(
-                    "1. Диалоговое окно\n" +
-                            "2. Пользовательская форма\n" +
-                            "0. Выход");
-            try
-            {
+                    "1." + Resources.rb.getString("DIALOG_MODE") + "\n" +
+                            "2." + Resources.rb.getString("CLIENT_FORM_MODE") + '\n' +
+                            "0." + Resources.rb.getString("MESSAGE_MAIN_MENU_ITEM_EXIT"));
+            try {
                 selection = scanner.nextInt();
-                switch (selection){
+                switch (selection) {
                     case 0 -> System.exit(0);
                     case 1 -> {
                         GeneralController.startApp(false);
@@ -36,27 +37,32 @@ public class Main {
                         GeneralController.startApp(true);
                         return;
                     }
-                    default -> System.err.println("Неверный пункт меню");
+                    default -> System.err.println(Resources.rb.getString("MESSAGE_WRONG_MENU_POINT"));
                 }
                 System.out.println(Resources.rb.getString("MESSAGE_HELLO"));
-            }
-            catch (InputMismatchException ex){
+            } catch (InputMismatchException ex) {
                 scanner.nextLine();
-                System.err.println("Невалидные данные!");
-            } catch (Exception e) {
-                e.printStackTrace();
+                System.err.println(Resources.rb.getString("INVALID_DATA"));
+            } catch (IOException ex) {
+                System.err.println(ex.getMessage());
             }
         }
     }
 
-    private static void showDialog() throws Exception {
-        int selection = 0;
-        System.out.println("Введите порт для подключения к серверу: ");
-        selection = scanner.nextInt();
-        DialogListener.connectClient(selection);
-        if(!Client.isConnected()){
-            System.err.println("Не удалось подключиться к серверу!");
-            return;
+    private static void showDialog() throws IOException {
+        int selection;
+        while (!Client.isConnected()) {
+            try {
+                Thread.sleep(500);
+                System.out.println(Resources.rb.getString("MESSAGE_ENTER_PORT"));
+                selection = scanner.nextInt();
+                DialogListener.connectClient(selection);
+            } catch (InputMismatchException ex) {
+                scanner.nextLine();
+                System.err.println(Resources.rb.getString("INVALID_DATA"));
+            } catch (Exception ex) {
+                System.err.println(ex.getMessage());
+            }
         }
         while (true) {
             System.out.println(
@@ -80,7 +86,7 @@ public class Main {
                         case 1 -> DialogListener.createHerbivore();
                         case 2 -> DialogListener.createPredator();
                         case 3 -> DialogListener.createGrass();
-                        default -> throw new IllegalArgumentException("Неверный пункт меню!");
+                        default -> System.err.println(Resources.rb.getString("MESSAGE_WRONG_MENU_POINT"));
                     }
                 }
                 //Убить
@@ -92,7 +98,7 @@ public class Main {
                     switch (selection) {
                         case 1 -> DialogListener.killHerbivore();
                         case 2 -> DialogListener.killPredator();
-                        default -> throw new IllegalArgumentException("Неверный пункт меню!");
+                        default -> System.err.println(Resources.rb.getString("MESSAGE_WRONG_MENU_POINT"));
                     }
                 }
                 //Покормить
@@ -105,7 +111,7 @@ public class Main {
                     switch (selection) {
                         case 1 -> DialogListener.feedHerbivore();
                         case 2 -> DialogListener.feedPredator();
-                        default -> throw new IllegalArgumentException("Неверный пункт меню!");
+                        default -> System.err.println(Resources.rb.getString("MESSAGE_WRONG_MENU_POINT"));
                     }
                 }
                 //Вывести
@@ -129,13 +135,11 @@ public class Main {
                             DialogListener.save();
                             System.exit(0);
                         }
-                        case 2 -> {
-                            System.exit(0);
-                        }
-                        default -> throw new IllegalArgumentException("Неверный пункт меню!");
+                        case 2 -> System.exit(0);
+                        default -> System.err.println(Resources.rb.getString("MESSAGE_WRONG_MENU_POINT"));
                     }
                 }
-                default -> throw new IllegalArgumentException("Неверный пункт меню!");
+                default -> System.err.println(Resources.rb.getString("MESSAGE_WRONG_MENU_POINT"));
             }
         }
     }

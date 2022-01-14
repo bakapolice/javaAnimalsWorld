@@ -1,6 +1,5 @@
 package resources;
 
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -21,8 +20,7 @@ public class Resources {
         rb = ResourceBundle.getBundle("ResourceBundle", locale);
     }
 
-    //Метод, задающий настройки, указанные в config.resources
-    public static boolean startApp() {
+    public static boolean setup() {
         Properties properties = new Properties();
         try {
             System.out.println(configPath);
@@ -36,8 +34,7 @@ public class Resources {
             setLocale(properties.getProperty("language"));
             initialise = Integer.parseInt(properties.getProperty("storage.load"));
         } catch (IOException ex) {
-            ex.printStackTrace();
-            System.err.println("Ошибка! Файл с настройками не найден!");
+            System.err.println("Ошибка! Файл с настройками не найден!\nError! Resources file didn't find!");
             return false;
         }
         return true;

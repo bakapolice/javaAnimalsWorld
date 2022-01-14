@@ -1,7 +1,6 @@
 package controller.Listener;
 
 import controller.GeneralController;
-import controller.NetController;
 import resources.Resources;
 import view.ClientForm;
 
@@ -37,7 +36,7 @@ public class ClientListener implements ActionListener, ItemListener {
             @Override
             public void windowClosing(WindowEvent e) {
                 GeneralController.save();
-                NetController.exitClient();
+                NetListener.exitClient();
                 super.windowClosing(e);
                 System.exit(0);
             }
@@ -51,7 +50,7 @@ public class ClientListener implements ActionListener, ItemListener {
 
         // Обработка события "Создать"
         if (e.getSource() == clientForm.getButtonCreate()) {
-            message = log + "Нажата кнопка " + clientForm.getButtonCreate().getActionCommand();
+            message = log + Resources.rb.getString("MESSAGE_BUTTON_CLICK") + clientForm.getButtonCreate().getActionCommand();
             clientForm.getTextAreaLogs().append(message + '\n');
             createPerform();
         }
@@ -59,59 +58,44 @@ public class ClientListener implements ActionListener, ItemListener {
 
         // Обработка события "Убить"
         if (e.getSource() == clientForm.getButtonKill()) {
-            message = log + "Нажата кнопка " + clientForm.getButtonKill().getActionCommand();
+            message = log + Resources.rb.getString("MESSAGE_BUTTON_CLICK") + clientForm.getButtonKill().getActionCommand();
             clientForm.getTextAreaLogs().append(message + '\n');
-            try {
-                killPerform();
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
+            killPerform();
         }
 
         // Обработка события "Покормить"
         if (e.getSource() == clientForm.getButtonFeed()) {
-            message = log + "Нажата кнопка " + clientForm.getButtonFeed().getActionCommand();
+            message = log + Resources.rb.getString("MESSAGE_BUTTON_CLICK") + clientForm.getButtonFeed().getActionCommand();
             clientForm.getTextAreaLogs().append(message + '\n');
-            try {
-                feedPerform();
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
+            feedPerform();
         }
 
         // Обработка события "Вывести на экран"
         if (e.getSource() == clientForm.getButtonPrint()) {
-            message = log + "Нажата кнопка " + clientForm.getButtonPrint().getActionCommand();
+            message = log + Resources.rb.getString("MESSAGE_BUTTON_CLICK") + clientForm.getButtonPrint().getActionCommand();
             clientForm.getTextAreaLogs().append(message + '\n');
             printPerform();
         }
 
         // Обработка события "Начать работу"
         if (e.getSource() == clientForm.getButtonStart()) {
-            message = log + "Нажата кнопка " + clientForm.getButtonStart().getActionCommand();
+            message = log + Resources.rb.getString("MESSAGE_BUTTON_CLICK") + clientForm.getButtonStart().getActionCommand();
             clientForm.getTextAreaLogs().append(message + '\n');
             try {
                 startPerform();
                 loadData();
             } catch (Exception ex) {
-                ex.printStackTrace();
+                clientForm.getTextAreaErrors().append(error + Resources.rb.getString("MESSAGE_ERROR_CONNECTING")+'\n');
             }
         }
 
         // Обработка события "Отключиться"
         if (e.getSource() == clientForm.getButtonStop()) {
-            message = log + "Нажата кнопка " + clientForm.getButtonStop().getActionCommand();
+            message = log + Resources.rb.getString("MESSAGE_BUTTON_CLICK") + clientForm.getButtonStop().getActionCommand();
             clientForm.getTextAreaLogs().append(message + '\n');
-            try {
-                NetController.disconnectClient();
-                clientForm.disableComponents();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+            NetListener.disconnectClient();
+            clientForm.disableComponents();
         }
-
-//        System.out.println(e.getSource());
-//        System.out.println(e.getActionCommand());
     }
 
 
@@ -123,6 +107,7 @@ public class ClientListener implements ActionListener, ItemListener {
         clientForm.getListAllAliveHerbivoresToFeed().removeAll();
         clientForm.getListAllAlivePredators().removeAll();
         clientForm.getChoiceAllFood().removeAll();
+        clientForm.getTextAreaPrint().setText(null);
 
         GeneralController.loadData(GeneralController.ALL_ALIVE_HERBIVORES);
         GeneralController.loadData(GeneralController.ALL_ALIVE_PREDATORS);
@@ -132,7 +117,7 @@ public class ClientListener implements ActionListener, ItemListener {
     @Override
     public void itemStateChanged(ItemEvent e) {
         if (e.getSource() == clientForm.getCbHerbivores()) {
-            clientForm.getTextAreaLogs().append(log + "Выбран чекбокс:" + e.getItem() + '\n');
+            clientForm.getTextAreaLogs().append(log + Resources.rb.getString("MESSAGE_CHECKBOX_CHECKED") + e.getItem() + '\n');
             clientForm.getListAllAliveHerbivoresToFeed().setVisible(true);
             clientForm.getListAllAlivePredators().setVisible(false);
 
@@ -140,7 +125,7 @@ public class ClientListener implements ActionListener, ItemListener {
             clientForm.getChoiceAllAliveHerbivores().setVisible(false);
         }
         if (e.getSource() == clientForm.getCbPredators()) {
-            clientForm.getTextAreaLogs().append(log + "Выбран чекбокс:" + e.getItem() + '\n');
+            clientForm.getTextAreaLogs().append(log + Resources.rb.getString("MESSAGE_CHECKBOX_CHECKED") + e.getItem() + '\n');
             clientForm.getListAllAlivePredators().setVisible(true);
             clientForm.getListAllAliveHerbivoresToFeed().setVisible(false);
 
@@ -149,7 +134,7 @@ public class ClientListener implements ActionListener, ItemListener {
         }
 
         if (e.getSource() == clientForm.getChoiceLanguage()) {
-            clientForm.getTextAreaLogs().append(log + "Язык формы изменен\n");
+            clientForm.getTextAreaLogs().append(log + Resources.rb.getString("MESSAGE_LANGUAGE_CHANGED")+ "\n");
             if (!Objects.equals(clientForm.getChoiceLanguage().getSelectedItem(), Resources.locale.getLanguage())) {
                 Resources.setLocale(clientForm.getChoiceLanguage().getSelectedItem());
                 clientForm.refresh();
@@ -158,41 +143,37 @@ public class ClientListener implements ActionListener, ItemListener {
 
         if (e.getSource() == clientForm.getCbPredatorsKill())
         {
-            clientForm.getTextAreaLogs().append(log + "Выбран чекбокс:" + e.getItem() + '\n');
+            clientForm.getTextAreaLogs().append(log + Resources.rb.getString("MESSAGE_CHECKBOX_CHECKED") + e.getItem() + '\n');
             clientForm.getChoiceAllAlivePredatorsKill().setVisible(true);
             clientForm.getChoiceAllAliveHerbivoresKill().setVisible(false);
         }
 
         if (e.getSource() == clientForm.getCbHerbivoresKill())
         {
-            clientForm.getTextAreaLogs().append(log + "Выбран чекбокс:" + e.getItem() + '\n');
+            clientForm.getTextAreaLogs().append(log + Resources.rb.getString("MESSAGE_CHECKBOX_CHECKED") + e.getItem() + '\n');
             clientForm.getChoiceAllAliveHerbivoresKill().setVisible(true);
             clientForm.getChoiceAllAlivePredatorsKill().setVisible(false);
         }
-
-
-//        System.out.println(e.getItem());
     }
 
     private void createPerform(){
-        String message;
         String selected = clientForm.getListWhatToCreate().getSelectedItem();
         String name = clientForm.getTextFieldName().getText();
         String weigh = clientForm.getTextFieldWeight().getText();
 
         if (selected.isEmpty()) {
-            JOptionPane.showMessageDialog(clientForm, "Выберите кого создать!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-            clientForm.getTextAreaErrors().append(error + "Выберите кого создать!\n");
+            JOptionPane.showMessageDialog(clientForm, Resources.rb.getString("MSGBOX_CHOOSE_WHO_TO_CREATE"), Resources.rb.getString("WARNING"), JOptionPane.WARNING_MESSAGE);
+            clientForm.getTextAreaErrors().append(error + Resources.rb.getString("MSGBOX_CHOOSE_WHO_TO_CREATE")+"\n");
             return;
         }
         if (name.isEmpty()) {
-            JOptionPane.showMessageDialog(clientForm, "Заполните поле 'Имя'", "Внимание!", JOptionPane.WARNING_MESSAGE);
-            clientForm.getTextAreaErrors().append(error + "Заполните поле 'Имя'\n");
+            JOptionPane.showMessageDialog(clientForm, Resources.rb.getString("MSGBOX_FILL_NAME_FIELD"), Resources.rb.getString("WARNING"), JOptionPane.WARNING_MESSAGE);
+            clientForm.getTextAreaErrors().append(error + Resources.rb.getString("MSGBOX_FILL_NAME_FIELD") + '\n');
             return;
         }
         if (weigh.isEmpty()) {
-            JOptionPane.showMessageDialog(clientForm, "Заполните поле 'Вес'", "Внимание!", JOptionPane.WARNING_MESSAGE);
-            clientForm.getTextAreaErrors().append(error + "Заполните поле 'Вес'\n");
+            JOptionPane.showMessageDialog(clientForm, Resources.rb.getString("MSGBOX_FILL_WEIGH_FIELD"), Resources.rb.getString("WARNING"), JOptionPane.WARNING_MESSAGE);
+            clientForm.getTextAreaErrors().append(error + Resources.rb.getString("MSGBOX_FILL_WEIGH_FIELD") + '\n');
             return;
         }
 
@@ -204,62 +185,48 @@ public class ClientListener implements ActionListener, ItemListener {
                                 case 2 -> GeneralController.createGrass(name, fWeigh);
                             }
         } catch (NumberFormatException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(clientForm, "Значение поля 'Вес' введено некорректно", "Ошибка данных", JOptionPane.ERROR_MESSAGE);
-            clientForm.getTextAreaErrors().append(error + "Значение поля 'Вес' введено некорректно\n");
+            JOptionPane.showMessageDialog(clientForm, Resources.rb.getString("MSGBOX_WRONG_WEIGH_VALUE"), Resources.rb.getString("DATA_ERROR"), JOptionPane.ERROR_MESSAGE);
+            clientForm.getTextAreaErrors().append(error + Resources.rb.getString("MSGBOX_WRONG_WEIGH_VALUE") + "\n");
             return;
         }
         loadData();
-        message = log +
-                "Создать: " + selected + "; " +
-                "Имя: " + name + "; " +
-                "Вес: " + weigh;
-        clientForm.getTextAreaLogs().append(message + '\n');
     }
 
 
-    private void killPerform() throws InterruptedException {
-        String message;
+    private void killPerform(){
         if (clientForm.getCbgKill().getSelectedCheckbox() == null) {
-            JOptionPane.showMessageDialog(clientForm, "Выберите кого убить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-            clientForm.getTextAreaErrors().append(error + "Выберите кого убить!\n");
+            JOptionPane.showMessageDialog(clientForm, Resources.rb.getString("MSGBOX_CHOOSE_WHO_TO_KILL"), Resources.rb.getString("WARNING"), JOptionPane.WARNING_MESSAGE);
+            clientForm.getTextAreaErrors().append(error + Resources.rb.getString("MSGBOX_CHOOSE_WHO_TO_KILL")+ "\n");
             return;
         }
 
         if (clientForm.getCbHerbivoresKill().getState()) {
             String selectedHerbivore = clientForm.getChoiceAllAliveHerbivoresKill().getSelectedItem();
             if (selectedHerbivore.isEmpty()) {
-                JOptionPane.showMessageDialog(clientForm, "Выберите какого травоядного убить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-                clientForm.getTextAreaErrors().append(error + "Выберите какого травоядного убить!\n");
+                JOptionPane.showMessageDialog(clientForm, Resources.rb.getString("MSGBOX_CHOOSE_WHO_TO_KILL_HERB"), Resources.rb.getString("WARNING"), JOptionPane.WARNING_MESSAGE);
+                clientForm.getTextAreaErrors().append(error + Resources.rb.getString("MSGBOX_CHOOSE_WHO_TO_KILL_HERB")+"\n");
                 return;
             }
             GeneralController.killHerbivore(clientForm.getChoiceAllAliveHerbivoresKill().getSelectedIndex(), true);
             loadData();
-            message = log +
-                    "Убить травоядное " + selectedHerbivore;
-            clientForm.getTextAreaLogs().append(message + '\n');
         }
 
         if (clientForm.getCbPredatorsKill().getState()) {
             String selectedPredator = clientForm.getChoiceAllAlivePredatorsKill().getSelectedItem();
             if (selectedPredator.isEmpty()) {
-                JOptionPane.showMessageDialog(clientForm, "Выберите какого хищника убить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-                clientForm.getTextAreaErrors().append(error + "Выберите какого хищника убить!\n");
+                JOptionPane.showMessageDialog(clientForm, Resources.rb.getString("MSGBOX_CHOOSE_WHO_TO_KILL_PRED"), Resources.rb.getString("WARNING"), JOptionPane.WARNING_MESSAGE);
+                clientForm.getTextAreaErrors().append(error + Resources.rb.getString("MSGBOX_CHOOSE_WHO_TO_KILL_PRED")+"\n");
                 return;
             }
             GeneralController.killPredator(clientForm.getChoiceAllAlivePredatorsKill().getSelectedIndex(), true);
             loadData();
-            message = log +
-                    "Убить хищника " + selectedPredator;
-            clientForm.getTextAreaLogs().append(message + '\n');
         }
     }
 
-    private void feedPerform() throws InterruptedException {
-        String message;
+    private void feedPerform(){
         if (clientForm.getCbgFeed().getSelectedCheckbox() == null) {
-            JOptionPane.showMessageDialog(clientForm, "Выберите кого покормить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-            clientForm.getTextAreaErrors().append(error + "Выберите кого покормить!\n");
+            JOptionPane.showMessageDialog(clientForm, Resources.rb.getString("MSGBOX_CHOOSE_WHO_TO_FEED"), Resources.rb.getString("WARNING"), JOptionPane.WARNING_MESSAGE);
+            clientForm.getTextAreaErrors().append(error + Resources.rb.getString("MSGBOX_CHOOSE_WHO_TO_FEED")+"\n");
             return;
         }
 
@@ -267,118 +234,97 @@ public class ClientListener implements ActionListener, ItemListener {
             String selectedHerbivore = clientForm.getListAllAliveHerbivoresToFeed().getSelectedItem();
             String selectedFood = clientForm.getChoiceAllFood().getSelectedItem();
             if (selectedHerbivore.isEmpty()) {
-                JOptionPane.showMessageDialog(clientForm, "Выберите какого травоядного кормить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-                clientForm.getTextAreaErrors().append(error + "Выберите какого травоядного кормить!\n");
+                JOptionPane.showMessageDialog(clientForm, Resources.rb.getString("MSGBOX_CHOOSE_WHO_TO_FEED_HERB"), Resources.rb.getString("WARNING"), JOptionPane.WARNING_MESSAGE);
+                clientForm.getTextAreaErrors().append(error + Resources.rb.getString("MSGBOX_CHOOSE_WHO_TO_FEED_HERB")+ "\n");
                 return;
             }
             if (selectedFood.isEmpty()) {
-                JOptionPane.showMessageDialog(clientForm, "Выберите чем кормить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-                clientForm.getTextAreaErrors().append(error + "Выберите чем кормить!\n");
+                JOptionPane.showMessageDialog(clientForm, Resources.rb.getString("MSGBOX_CHOOSE_WHAT_TO_FEED"), Resources.rb.getString("WARNING"), JOptionPane.WARNING_MESSAGE);
+                clientForm.getTextAreaErrors().append(error + Resources.rb.getString("MSGBOX_CHOOSE_WHAT_TO_FEED") + "\n");
                 return;
             }
             int herbivoreID = clientForm.getListAllAliveHerbivoresToFeed().getSelectedIndex();
             int foodID = clientForm.getChoiceAllFood().getSelectedIndex();
             GeneralController.feedHerbivore(herbivoreID, foodID, true);
             loadData();
-            message = log +
-                    "Покормить травоядное " + selectedHerbivore +
-                    "; Еда: " + selectedFood;
-            clientForm.getTextAreaLogs().append(message + '\n');
         }
 
         if (clientForm.getCbPredators().getState()) {
             String selectedPredator = clientForm.getListAllAlivePredators().getSelectedItem();
             String selectedFood = clientForm.getChoiceAllAliveHerbivores().getSelectedItem();
             if (selectedPredator.isEmpty()) {
-                JOptionPane.showMessageDialog(clientForm, "Выберите какого хищника кормить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-                clientForm.getTextAreaErrors().append(error + "Выберите какого хищника кормить!\n");
+                JOptionPane.showMessageDialog(clientForm, Resources.rb.getString("MSGBOX_CHOOSE_WHO_TO_FEED_PRED"), Resources.rb.getString("WARNING"), JOptionPane.WARNING_MESSAGE);
+                clientForm.getTextAreaErrors().append(error + Resources.rb.getString("MSGBOX_CHOOSE_WHO_TO_FEED_PRED") + "\n");
                 return;
             }
             if (selectedFood.isEmpty()) {
-                JOptionPane.showMessageDialog(clientForm, "Выберите чем кормить!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-                clientForm.getTextAreaErrors().append(error + "Выберите чем кормить!\n");
+                JOptionPane.showMessageDialog(clientForm, Resources.rb.getString("MSGBOX_CHOOSE_WHAT_TO_FEED"), Resources.rb.getString("WARNING"), JOptionPane.WARNING_MESSAGE);
+                clientForm.getTextAreaErrors().append(error + Resources.rb.getString("MSGBOX_CHOOSE_WHAT_TO_FEED") + "\n");
                 return;
             }
             int predatorID = clientForm.getListAllAlivePredators().getSelectedIndex();
             int herbivoreID = clientForm.getChoiceAllAliveHerbivores().getSelectedIndex();
             GeneralController.feedPredator(predatorID, herbivoreID, true);
             loadData();
-            message = log +
-                    "Покормить хищника " + selectedPredator +
-                    "; Еда: " + selectedFood;
-            clientForm.getTextAreaLogs().append(message + '\n');
         }
     }
 
     private void printPerform() {
         if (clientForm.getCbgPrint().getSelectedCheckbox() == null) {
-            JOptionPane.showMessageDialog(clientForm, "Выберите что вывести на экран!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-            clientForm.getTextAreaErrors().append(error + "Выберите что вывести на экран!\n");
+            JOptionPane.showMessageDialog(clientForm, Resources.rb.getString("MSGBOX_CHOOSE_WHAT_TO_PRINT"), Resources.rb.getString("WARNING"), JOptionPane.WARNING_MESSAGE);
+            clientForm.getTextAreaErrors().append(error + Resources.rb.getString("MSGBOX_CHOOSE_WHAT_TO_PRINT") + "\n");
             return;
         }
         TextArea textArea = clientForm.getTextAreaPrint();
         textArea.setText(null);
         if (clientForm.getCbAllAnimals().getState()) {
             GeneralController.print(GeneralController.ALL_ANIMALS);
-            textArea.append("Вывод на экран списка всех животных\n");
         }
         if (clientForm.getCbAllAliveAnimals().getState()) {
             GeneralController.print(GeneralController.ALL_ALIVE_ANIMALS);
-            clientForm.getTextAreaPrint().append("Вывод на экран списка всех живых животных\n");
         }
         if (clientForm.getCbAllHerbivores().getState()) {
             GeneralController.print(GeneralController.ALL_HERBIVORES);
-            clientForm.getTextAreaPrint().append("Вывод на экран списка всех травоядных\n");
         }
         if (clientForm.getCbAllPredators().getState()) {
             GeneralController.print(GeneralController.ALL_PREDATORS);
-            clientForm.getTextAreaPrint().append("Вывод на экран списка всех хищников\n");
         }
         if (clientForm.getCbAllAliveHerbivores().getState()) {
             GeneralController.print(GeneralController.ALL_ALIVE_HERBIVORES);
-            clientForm.getTextAreaPrint().append("Вывод на экран списка всех живых травоядных\n");
         }
         if (clientForm.getCbAllAlivePredators().getState()) {
             GeneralController.print(GeneralController.ALL_ALIVE_PREDATORS);
-            clientForm.getTextAreaPrint().append("Вывод на экран списка всех живых хищников\n");
         }
         if (clientForm.getCbAllFood().getState()) {
             GeneralController.print(GeneralController.ALL_FOOD);
-            clientForm.getTextAreaPrint().append("Вывод на экран списка всей еды\n");
         }
     }
 
 
     private void startPerform() throws Exception {
-        String message;
         String host = clientForm.getTextFieldHost().getText();
         String sPort = clientForm.getTextFieldPort().getText();
-        int port = 0;
+        int port;
         if (host.isEmpty()) {
-            JOptionPane.showMessageDialog(clientForm, "Введите адрес хоста!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-            clientForm.getTextAreaErrors().append(error + "Введите адрес хоста!\n");
+            JOptionPane.showMessageDialog(clientForm, Resources.rb.getString("MSGBOX_FILL_HOST_FIELD"), Resources.rb.getString("WARNING"), JOptionPane.WARNING_MESSAGE);
+            clientForm.getTextAreaErrors().append(error + Resources.rb.getString("MSGBOX_FILL_HOST_FIELD") + "\n");
             return;
         }
         if (sPort.isEmpty()) {
-            JOptionPane.showMessageDialog(clientForm, "Введите значение порта!", "Внимание!", JOptionPane.WARNING_MESSAGE);
-            clientForm.getTextAreaErrors().append(error + "Введите значение порта!\n");
+            JOptionPane.showMessageDialog(clientForm, Resources.rb.getString("MSGBOX_FILL_PORT_FIELD"), Resources.rb.getString("WARNING"), JOptionPane.WARNING_MESSAGE);
+            clientForm.getTextAreaErrors().append(error + Resources.rb.getString("MSGBOX_FILL_PORT_FIELD")+"\n");
             return;
         }
 
         try {
             port = Integer.parseInt(sPort);
         } catch (NumberFormatException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(clientForm, "Значение порта введено некорректно!", "Ошибка данных", JOptionPane.ERROR_MESSAGE);
-            clientForm.getTextAreaErrors().append(error + "Значение порта введено некорректно!\n");
+            JOptionPane.showMessageDialog(clientForm, Resources.rb.getString("MSGBOX_WRONG_PORT_VALUE"), Resources.rb.getString("DATA_ERROR"), JOptionPane.ERROR_MESSAGE);
+            clientForm.getTextAreaErrors().append(error + Resources.rb.getString("MSGBOX_WRONG_PORT_VALUE")+"\n");
             return;
         }
 
-        message = log +
-                "Подключение к серверу... " +
-                host + ":" + port;
-        NetController.connectClient(host,port);
+        NetListener.connectClient(host,port);
         clientForm.enableComponents();
-        clientForm.getTextAreaLogs().append(message + '\n');
     }
 }

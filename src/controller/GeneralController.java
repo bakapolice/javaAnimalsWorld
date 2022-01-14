@@ -1,6 +1,8 @@
 package controller;
 
 
+import controller.Listener.NetListener;
+import resources.Resources;
 import view.ClientForm;
 
 import javax.swing.*;
@@ -21,51 +23,51 @@ public class GeneralController {
         if (isForm) {
             clientForm = new ClientForm();
         }
-        NetController.startApp();
+        NetListener.startApp();
     }
 
     // Создание -----------------------------------------------------
     public static void createPredator(String name, Float weigh) {
-        NetController.sendRequestToServer(NetController.REQUEST_TYPE_CREATE, "Predator", name, weigh);
+        NetListener.sendRequestToServer(NetListener.REQUEST_TYPE_CREATE, "Predator", name, weigh);
     }
 
     public static void createHerbivore(String name, Float weigh) {
-        NetController.sendRequestToServer(NetController.REQUEST_TYPE_CREATE, "Herbivore", name, weigh);
+        NetListener.sendRequestToServer(NetListener.REQUEST_TYPE_CREATE, "Herbivore", name, weigh);
     }
 
     public static void createGrass(String name, Float weigh) {
-        NetController.sendRequestToServer(NetController.REQUEST_TYPE_CREATE, "Grass", name, weigh);
+        NetListener.sendRequestToServer(NetListener.REQUEST_TYPE_CREATE, "Grass", name, weigh);
     }
     //---------------------------------------------------------------
 
 
     //Убить ---------------------------------------------------------
     public static void killHerbivore(int selection, boolean form) {
-        NetController.sendRequestToServer(NetController.REQUEST_TYPE_KILL, "Herbivore", selection, form);
+        NetListener.sendRequestToServer(NetListener.REQUEST_TYPE_KILL, "Herbivore", selection, form);
     }
 
     public static void killPredator(int selection, boolean form) {
-        NetController.sendRequestToServer(NetController.REQUEST_TYPE_KILL, "Predator", selection, form);
+        NetListener.sendRequestToServer(NetListener.REQUEST_TYPE_KILL, "Predator", selection, form);
     }
     //---------------------------------------------------------------
 
     //Покормить -----------------------------------------------------
     public static void feedHerbivore(int selection, int foodID, boolean form) {
-        NetController.sendRequestToServer(NetController.REQUEST_TYPE_FEED, "Herbivore", selection, foodID, form);
+        NetListener.sendRequestToServer(NetListener.REQUEST_TYPE_FEED, "Herbivore", selection, foodID, form);
     }
 
     public static void feedPredator(int selection, int foodID, boolean form) {
-        NetController.sendRequestToServer(NetController.REQUEST_TYPE_FEED, "Predator", selection, foodID, form);
+        NetListener.sendRequestToServer(NetListener.REQUEST_TYPE_FEED, "Predator", selection, foodID, form);
     }
     //---------------------------------------------------------------
 
     //Вывести -------------------------------------------------------
     public static void print(int selection) {
-        NetController.sendRequestToServer(NetController.REQUEST_TYPE_PRINT, selection);
+        NetListener.sendRequestToServer(NetListener.REQUEST_TYPE_PRINT, selection);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
     }
     //---------------------------------------------------------------
@@ -74,9 +76,9 @@ public class GeneralController {
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
-        NetController.sendRequestToServer(NetController.REQUEST_TYPE_LOAD, selection);
+        NetListener.sendRequestToServer(NetListener.REQUEST_TYPE_LOAD, selection);
     }
 
     public static void disableComponents(){
@@ -86,10 +88,10 @@ public class GeneralController {
 
     public static void ConnectErrorMessage(){
         if(clientForm != null)
-            JOptionPane.showMessageDialog(GeneralController.clientForm, "Сервер отключен или недоступен!", "Ошибка!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(GeneralController.clientForm, Resources.rb.getString("MESSAGE_ERROR_SERVER_CLOSED"), Resources.rb.getString("ERROR"), JOptionPane.ERROR_MESSAGE);
     }
 
     public static void save() {
-        NetController.sendRequestToServer(NetController.REQUEST_TYPE_SAVE);
+        NetListener.sendRequestToServer(NetListener.REQUEST_TYPE_SAVE);
     }
 }
