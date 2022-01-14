@@ -26,7 +26,6 @@ public class GeneralController {
         NetListener.startApp();
     }
 
-    // Создание -----------------------------------------------------
     public static void createPredator(String name, Float weigh) {
         NetListener.sendRequestToServer(NetListener.REQUEST_TYPE_CREATE, "Predator", name, weigh);
     }
@@ -38,10 +37,8 @@ public class GeneralController {
     public static void createGrass(String name, Float weigh) {
         NetListener.sendRequestToServer(NetListener.REQUEST_TYPE_CREATE, "Grass", name, weigh);
     }
-    //---------------------------------------------------------------
 
 
-    //Убить ---------------------------------------------------------
     public static void killHerbivore(int selection, boolean form) {
         NetListener.sendRequestToServer(NetListener.REQUEST_TYPE_KILL, "Herbivore", selection, form);
     }
@@ -49,9 +46,7 @@ public class GeneralController {
     public static void killPredator(int selection, boolean form) {
         NetListener.sendRequestToServer(NetListener.REQUEST_TYPE_KILL, "Predator", selection, form);
     }
-    //---------------------------------------------------------------
 
-    //Покормить -----------------------------------------------------
     public static void feedHerbivore(int selection, int foodID, boolean form) {
         NetListener.sendRequestToServer(NetListener.REQUEST_TYPE_FEED, "Herbivore", selection, foodID, form);
     }
@@ -59,9 +54,7 @@ public class GeneralController {
     public static void feedPredator(int selection, int foodID, boolean form) {
         NetListener.sendRequestToServer(NetListener.REQUEST_TYPE_FEED, "Predator", selection, foodID, form);
     }
-    //---------------------------------------------------------------
 
-    //Вывести -------------------------------------------------------
     public static void print(int selection) {
         NetListener.sendRequestToServer(NetListener.REQUEST_TYPE_PRINT, selection);
         try {
@@ -70,7 +63,6 @@ public class GeneralController {
             System.err.println(e.getMessage());
         }
     }
-    //---------------------------------------------------------------
 
     public static void loadData(int selection) {
         try {

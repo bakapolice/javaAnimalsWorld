@@ -75,7 +75,6 @@ public class Main {
             selection = scanner.nextInt();
 
             switch (selection) {
-                //Создать
                 case 1 -> {
                     System.out.println(
                             "1. " + Resources.rb.getString("MESSAGE_HERBIVORE") + "\n" +
@@ -89,7 +88,6 @@ public class Main {
                         default -> System.err.println(Resources.rb.getString("MESSAGE_WRONG_MENU_POINT"));
                     }
                 }
-                //Убить
                 case 2 -> {
                     System.out.println(
                             "1. " + Resources.rb.getString("MESSAGE_HERBIVORE") + "\n" +
@@ -101,9 +99,7 @@ public class Main {
                         default -> System.err.println(Resources.rb.getString("MESSAGE_WRONG_MENU_POINT"));
                     }
                 }
-                //Покормить
                 case 3 -> {
-                    //Выбрать кого кормить
                     System.out.println(
                             "1." + Resources.rb.getString("MESSAGE_HERBIVORE") + "\n" +
                                     "2." + Resources.rb.getString("MESSAGE_PREDATOR"));
@@ -114,7 +110,6 @@ public class Main {
                         default -> System.err.println(Resources.rb.getString("MESSAGE_WRONG_MENU_POINT"));
                     }
                 }
-                //Вывести
                 case 4 -> {
                     System.out.println(
                             "1. " + Resources.rb.getString("MESSAGE_PRINT_ALL_ANIMALS") + '\n' +

@@ -48,36 +48,30 @@ public class ClientListener implements ActionListener, ItemListener {
     public void actionPerformed(ActionEvent e) {
         String message;
 
-        // Обработка события "Создать"
         if (e.getSource() == clientForm.getButtonCreate()) {
             message = log + Resources.rb.getString("MESSAGE_BUTTON_CLICK") + clientForm.getButtonCreate().getActionCommand();
             clientForm.getTextAreaLogs().append(message + '\n');
             createPerform();
         }
 
-
-        // Обработка события "Убить"
         if (e.getSource() == clientForm.getButtonKill()) {
             message = log + Resources.rb.getString("MESSAGE_BUTTON_CLICK") + clientForm.getButtonKill().getActionCommand();
             clientForm.getTextAreaLogs().append(message + '\n');
             killPerform();
         }
 
-        // Обработка события "Покормить"
         if (e.getSource() == clientForm.getButtonFeed()) {
             message = log + Resources.rb.getString("MESSAGE_BUTTON_CLICK") + clientForm.getButtonFeed().getActionCommand();
             clientForm.getTextAreaLogs().append(message + '\n');
             feedPerform();
         }
 
-        // Обработка события "Вывести на экран"
         if (e.getSource() == clientForm.getButtonPrint()) {
             message = log + Resources.rb.getString("MESSAGE_BUTTON_CLICK") + clientForm.getButtonPrint().getActionCommand();
             clientForm.getTextAreaLogs().append(message + '\n');
             printPerform();
         }
 
-        // Обработка события "Начать работу"
         if (e.getSource() == clientForm.getButtonStart()) {
             message = log + Resources.rb.getString("MESSAGE_BUTTON_CLICK") + clientForm.getButtonStart().getActionCommand();
             clientForm.getTextAreaLogs().append(message + '\n');
@@ -89,7 +83,6 @@ public class ClientListener implements ActionListener, ItemListener {
             }
         }
 
-        // Обработка события "Отключиться"
         if (e.getSource() == clientForm.getButtonStop()) {
             message = log + Resources.rb.getString("MESSAGE_BUTTON_CLICK") + clientForm.getButtonStop().getActionCommand();
             clientForm.getTextAreaLogs().append(message + '\n');
@@ -97,8 +90,6 @@ public class ClientListener implements ActionListener, ItemListener {
             clientForm.disableComponents();
         }
     }
-
-
 
     private void loadData(){
         clientForm.getChoiceAllAliveHerbivoresKill().removeAll();
@@ -299,7 +290,6 @@ public class ClientListener implements ActionListener, ItemListener {
             GeneralController.print(GeneralController.ALL_FOOD);
         }
     }
-
 
     private void startPerform() throws Exception {
         String host = clientForm.getTextFieldHost().getText();

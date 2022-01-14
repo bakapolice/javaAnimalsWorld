@@ -497,7 +497,7 @@ public class ClientForm extends Frame {
         this.setSize(1366, 768);
         this.setBackground(new Color(228, 228, 228));
 
-        this.setLocationRelativeTo(null); //поставит форму в центр экрана после размещения компонентов
+        this.setLocationRelativeTo(null); //Поставит форму в центр экрана после размещения компонентов
         setVisible(true);
 
         clientListener = new ClientListener(this);

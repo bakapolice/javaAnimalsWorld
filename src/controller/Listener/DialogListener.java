@@ -101,12 +101,10 @@ public class DialogListener {
     }
 
     public static void killHerbivore() {
-        //Список всех живых травоядных
         GeneralController.print(GeneralController.ALL_ALIVE_HERBIVORES);
         System.out.println(NetListener.getJsonResponse().getString("message"));
         while (true) {
             try {
-                //Выбрать травоядное
                 System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHO_TO_KILL"));
                 int selection = scanner.nextInt();
                 GeneralController.killHerbivore(selection, false);
@@ -119,12 +117,10 @@ public class DialogListener {
     }
 
     public static void killPredator() {
-        //Список всех живых хищников
         GeneralController.print(GeneralController.ALL_ALIVE_PREDATORS);
         System.out.println(NetListener.getJsonResponse().getString("message"));
         while (true) {
             try {
-                //Выбрать хищника
                 System.out.println(Resources.rb.getString("MESSAGE_CHOOSE_WHO_TO_KILL"));
                 int selection = scanner.nextInt();
                 GeneralController.killPredator(selection, false);
@@ -137,11 +133,9 @@ public class DialogListener {
     }
 
     public static void feedHerbivore() {
-        //Список всех живых травоядных
         GeneralController.print(GeneralController.ALL_ALIVE_HERBIVORES);
         System.out.println(NetListener.getJsonResponse().getString("message"));
         int selection = getSelection();
-        //Выбрать чем кормить
         GeneralController.print(GeneralController.ALL_FOOD);
         System.out.println(NetListener.getJsonResponse().getString("message"));
         int foodID = getFoodID();
@@ -149,11 +143,9 @@ public class DialogListener {
     }
 
     public static void feedPredator() {
-        //Список всех живых хищников
         GeneralController.print(GeneralController.ALL_ALIVE_PREDATORS);
         System.out.println(NetListener.getJsonResponse().getString("message"));
         int selection = getSelection();
-        //Выбрать чем кормить
         GeneralController.print(GeneralController.ALL_ALIVE_HERBIVORES);
         System.out.println(NetListener.getJsonResponse().getString("message"));
         int foodID = getFoodID();

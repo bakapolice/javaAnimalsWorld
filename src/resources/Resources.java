@@ -10,8 +10,6 @@ import java.util.ResourceBundle;
 public class Resources {
 
     private static final String configPath = FileSystems.getDefault().getPath("src", "resources", "config.properties").toString();
-    public static String storagePath;
-    public static int initialise;
     public static Locale locale = Locale.getDefault();
     public static ResourceBundle rb;
 
@@ -25,14 +23,8 @@ public class Resources {
         try {
             System.out.println(configPath);
             properties.load(new FileInputStream(configPath));
-            if(System.getProperty("os.name").contains("Windows")) {
-                storagePath = properties.getProperty("storage.win.path");
-            }
-            else if (System.getProperty("os.name").contains("Linux")) {
-                storagePath = properties.getProperty("storage.lin.path");
-            }
+
             setLocale(properties.getProperty("language"));
-            initialise = Integer.parseInt(properties.getProperty("storage.load"));
         } catch (IOException ex) {
             System.err.println("Ошибка! Файл с настройками не найден!\nError! Resources file didn't find!");
             return false;
