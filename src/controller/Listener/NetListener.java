@@ -111,6 +111,7 @@ public class NetListener {
                 case REQUEST_TYPE_LOAD -> {
                     JSONObject data = jsonResponse.getJSONObject("data");
                     JSONArray keys = data.names();
+                    if(keys == null) break;
                     switch (jsonResponse.getInt("selection_id")) {
                         case GeneralController.ALL_ALIVE_HERBIVORES -> {
                             for (int i = 0; i < keys.length(); i++) {
